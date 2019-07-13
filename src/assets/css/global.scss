@@ -24,7 +24,7 @@ sup{vertical-align:baseline;}
 sub{vertical-align:baseline;}
 legend{color:#000;}
 input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:normal;font-weight:normal; outline:none;border: none;}
-input,button,textarea,select{*font-size:100%;}
+input,button,textarea,select{font-size:100%;}
 textarea { resize:none;}
 i, em, strong { font-style:normal;}
 
@@ -48,8 +48,8 @@ i, em, strong { font-style:normal;}
   display: -webkit-flex;
   align-items: center;
   -webkit-align-items: center;
-  justify-content: center;
-  -webkit-justify-content: center;
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
 }
 
 .xr-yc {
@@ -61,6 +61,15 @@ i, em, strong { font-style:normal;}
   -webkit-justify-content: flex-end;
  }
 
+.xlr-yc {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+}
+
 .xc-yc {
   display: flex;
   display: -webkit-flex;
@@ -69,4 +78,5 @@ i, em, strong { font-style:normal;}
   justify-content: center;
   -webkit-justify-content: center;
 }
+
 

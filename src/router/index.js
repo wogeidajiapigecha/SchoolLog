@@ -25,7 +25,12 @@ export default new Router({
           component: resolve => require(['../components/Me'], resolve),
           meta: {title: '我'},
         },
+        {
+          path: '/record',
+          name: 'record',
+          component: resolve => require(['../components/Record.vue'], resolve),
+        }
       ]
-    }
+    },
   ]
 })
