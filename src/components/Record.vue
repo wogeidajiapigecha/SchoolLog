@@ -49,7 +49,7 @@
 
 <style lang="scss" scoped>
   .re-body {
-    padding: 20px 20px 60px;
+    padding: 20px 18px 60px;
     overflow-y: auto;
     width: 100%;
 

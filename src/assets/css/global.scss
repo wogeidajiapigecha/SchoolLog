@@ -70,6 +70,15 @@ i, em, strong { font-style:normal;}
   -webkit-justify-content: space-between;
 }
 
+.xlr-yt {
+  display: flex;
+  display: -webkit-flex;
+  align-items: start;
+  -webkit-align-items: start;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+}
+
 .xc-yc {
   display: flex;
   display: -webkit-flex;
@@ -77,6 +86,15 @@ i, em, strong { font-style:normal;}
   -webkit-align-items: center;
   justify-content: center;
   -webkit-justify-content: center;
+}
+
+.xl-yb {
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-end;
+  -webkit-align-items: flex-end;
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
 }
 
 

@@ -137,7 +137,7 @@
 
 <style lang="scss" scoped>
   .his-body {
-    padding: 18px 14px 60px;
+    padding: 18px 18px 60px;
     overflow-y: auto;
     width: 100%;
 
