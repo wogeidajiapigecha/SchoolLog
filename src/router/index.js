@@ -57,7 +57,17 @@ export default new Router({
           path: '/office/record',
           name: 'record',
           component: resolve => require(['../components/office/Record.vue'], resolve),
-        }
+        },
+        {
+          path: '/office/remind',
+          component: resolve => require(['../components/office/Remind'], resolve),
+          meta: {title: '提醒'},
+        },
+        {
+          path: '/office/detail',
+          component: resolve => require(['../components/office/Detail'], resolve),
+          meta: {title: '详细'},
+        },
       ]
     },
     {
@@ -84,7 +94,17 @@ export default new Router({
           path: '/school/record',
           name: 'record',
           component: resolve => require(['../components/school/Record.vue'], resolve),
-        }
+        },
+        {
+          path: '/school/remind',
+          component: resolve => require(['../components/school/Remind'], resolve),
+          meta: {title: '提醒'},
+        },
+        {
+          path: '/school/detail',
+          component: resolve => require(['../components/school/Detail'], resolve),
+          meta: {title: '详细'},
+        },
       ]
     },
   ]

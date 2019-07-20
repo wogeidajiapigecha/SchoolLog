@@ -1,40 +1,16 @@
 <template>
-  <div class="re-body">
-    <div style="margin-top: 24px;">
-      <div class="b-head xlr-yc">
-        <p class="b-title">一线教师</p>
-      </div>
-
+  <div class="de-body">
+    <div>
       <div class="re-block xl-yc">
         <p>应到人数:</p>
         <van-cell-group>
-          <van-field v-model="ydPeople" placeholder=""/>
+          <van-field v-model="ydPeople" disabled placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
         <p>实到人数:</p>
         <van-cell-group>
-          <van-field v-model="sdPeople" placeholder=""/>
-        </van-cell-group>
-      </div>
-    </div>
-
-
-    <div style="margin-top: 24px;">
-      <div class="b-head xlr-yc">
-        <p class="b-title">国际教师</p>
-      </div>
-
-      <div class="re-block xl-yc">
-        <p>应到人数:</p>
-        <van-cell-group>
-          <van-field v-model="ydPeople" placeholder=""/>
-        </van-cell-group>
-      </div>
-      <div class="re-block xl-yc">
-        <p>实到人数:</p>
-        <van-cell-group>
-          <van-field v-model="sdPeople" placeholder=""/>
+          <van-field v-model="sdPeople" disabled placeholder=""/>
         </van-cell-group>
       </div>
     </div>
@@ -43,33 +19,25 @@
       <div class="b-head xlr-yc">
         <p class="b-title">备注</p>
       </div>
-      <textarea class="record-content">
+      <textarea disabled class="record-content">
       {{remark}}
     </textarea>
     </div>
 
-    <div class="record-block">
-      <div class="b-head xlr-yc">
-        <p class="b-title">重要活动</p>
-      </div>
-      <textarea class="record-content">
-      {{remark}}
-    </textarea>
-    </div>
-
-    <van-button :loading="load" loading-text="保存中" class="save">保存记录</van-button>
+    <router-link tag="div" :to="{ path: '/office/remind' }">
+      <van-button :loading="load" loading-text="返回中" class="save">返回</van-button>
+    </router-link>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Record",
+    name: "Detail",
     data() {
       return {
         load: false,//按钮加载
         ydPeople: 35,//应到人数
         sdPeople: 35,//实到人数
-        qxPeople: 35,//缺席人数
         remark: "12324234",//备注
       }
     }
@@ -77,23 +45,10 @@
 </script>
 
 <style lang="scss" scoped>
-  .re-body {
-    padding: 20px 18px 60px;
+  .de-body {
+    padding: 30px 18px 60px;
     overflow-y: auto;
     width: 100%;
-
-    .b-head {
-      width: calc(100% - 10px);
-      height: 15px;
-      padding-left: 7px;
-      border-left: 3px solid #333333;
-
-      .b-title {
-        color: #333333;
-        font-size: 0.937rem;
-        font-weight: bold;
-      }
-    }
 
     .re-block {
       margin-bottom: 13px;
@@ -128,6 +83,7 @@
         height: 15px;
         padding-left: 7px;
         margin-bottom: 17px;
+        margin-top: 24px;
         border-left: 3px solid #333333;
 
         .b-title {
@@ -152,7 +108,6 @@
         font-size: 0.81rem;
       }
     }
-
     .save {
       width: 66%;
       height: 40px;
@@ -164,5 +119,6 @@
       font-size: 0.937rem;
       border-radius: 2px;
     }
+
   }
 </style>

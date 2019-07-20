@@ -12,7 +12,7 @@
     <div class="today-block today-block-1">
       <div class="b-head xlr-yc">
         <p class="b-title">今日学部记录情况</p>
-        <router-link tag="div" :to="{ path: '/school/record' }">
+        <router-link tag="div" :to="{ path: '/school/remind' }">
           <div class="xl-yc">
             <van-icon name="add-o" color="#346AFF"/>
             <p class="b-tt">提醒</p>

@@ -4,9 +4,12 @@
       <van-tab title="已完成">
         <div class="line xlr-yc" v-for="(item,index) in className" :key=index>
           <p class="line-name">{{item.name}}</p>
-          <router-link tag="p"  class="line-read" :to="{ path: '/office/detail' }">
-            查看
-          </router-link>
+          <div class="xr-yc">
+            <router-link tag="p"  class="line-read mr" :to="{ path: '/school/detail' }">
+              查看
+            </router-link>
+            <p class="line-read">生成pdf</p>
+          </div>
         </div>
       </van-tab>
       <van-tab title="未完成">
@@ -34,12 +37,11 @@
     data() {
       return {
         className: [
-          {name: "高一（1）班"},
-          {name: "高一（3）班"},
-          {name: "高一（7）班"},
-          {name: "高一（11）班"},
+          {name: "幼儿园"},
+          {name: "小学部"},
+          {name: "中学部"},
         ],
-        list: ['高一（10）班', '高一（2）班', '高一（5）班'],
+        list: ['幼儿园', '小学部', '中学部'],
         result: [],
       }
     }
@@ -62,6 +64,9 @@
         color: #4B77B0;
         font-size: 0.875rem;
         cursor: pointer;
+      }
+      .mr {
+        margin-right: 10px;
       }
     }
 

@@ -71,8 +71,10 @@
       </div>
     </div>
 
+    <router-link tag="div" :to="{ path: '/school/detail' }">
+      <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
+    </router-link>
 
-    <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
 
   </div>
 </template>
