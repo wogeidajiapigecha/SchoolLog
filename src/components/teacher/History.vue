@@ -34,14 +34,14 @@
           人
         </div>
       </van-col>
-        <van-col span="8" class="xr-yc">
-          <div class="num-circle nc-3"></div>
-          <div class="num-p">
-            缺勤:
-            <span class="nc-sp3">{{qqNum}}</span>
-            人
-          </div>
-        </van-col>
+      <van-col span="8" class="xr-yc">
+        <div class="num-circle nc-3"></div>
+        <div class="num-p">
+          缺勤:
+          <span class="nc-sp3">{{qqNum}}</span>
+          人
+        </div>
+      </van-col>
     </van-row>
 
     <div class="today-block">
@@ -51,10 +51,9 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-b.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{nTime}}</p>
         </div>
-        <p class="describe">国庆将放假七天，请老师做好学生放假安排工作。国庆将放假七天，请老师做好学生放假安排工作。 国庆将放假七天，请老师做好学生放假安排工作。
-          国庆将放假七天，请老师做好学生放假安排工作。 </p>
+        <p class="describe">{{remark}}</p>
       </div>
     </div>
 
@@ -64,6 +63,7 @@
 <script>
   import Calendar from 'mpvue-calendar'
   import 'mpvue-calendar/src/browser-style.css'
+  import teacherApi from '@/components/teacher/teacher.js'
 
   export default {
     name: "History",
@@ -75,7 +75,8 @@
         ydNum: 35,//应到人数
         sdNum: 25,//实到人数
         qqNum: 5,//缺勤人数
-
+        remark: "",
+        nTime:"",
 
         // months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         // // disabledArray: ['2018-6-27','2018-6-25'],
@@ -90,6 +91,11 @@
         //     {date: '2018-9-23', className: 'holiday ', content: '休'}
         // ],//为每个具体日期自定义class和插入文本内容，具体用法见下
       }
+    },
+    mounted(){
+      const now = new Date();
+      this.selected([now.getFullYear(), now.getMonth() + 1, now.getDate()],
+        {date:now.getFullYear()+"-"+(now.getMonth() + 1)+"-"+now.getDate()})
     },
     methods: {
       // prev(year, month, weekIndex) {
@@ -115,8 +121,6 @@
       //     this.$refs.calendar.renderer(2018, 8); //渲染2018年8月份
       // },
       selected(val, val2) {
-        console.log(val)
-        console.log(val2)
         // console.log(this.$refs.calendar.monthRangeDays)
         let monthArray = this.$refs.calendar.monthRangeDays
         monthArray.forEach(jj => {
@@ -129,6 +133,28 @@
               }
             })
           })
+        })
+        const dayStr = val[0] + "-" + (val[1] < 10 ? "0" + val[1] : val[1]) + "-" + (val[2] < 10 ? "0" + val[2] : val[2])
+        teacherApi.getStudents(this.$cookies.get("classid"), dayStr, PubFuc.getYear()).then(res => {
+          if(res[0]){
+            if (res[0]["stu_num"]) this.ydNum = res[0]["stu_num"]
+            if (res[0]["num_actual"] && res[0]["num_actual"] != null) {
+              this.sdNum = res[0]["num_actual"]
+            } else {
+              this.sdNum = '- -'
+            }
+            if ((res[0]["num_miss"] && res[0]["num_actual"] != null)||res[0]["num_miss"]==0) {
+              this.qqNum = res[0]["num_miss"]
+            } else {
+              this.qqNum = '- -'
+            }
+            if ((res[0]["remark"] && res[0]["remark"] != "")||res[0]["remark"]==0) {
+              this.remark = res[0]["remark"]
+            }else{
+              this.remark = "暂无"
+            }
+            this.nTime = dayStr
+          }
         })
       }
     },
@@ -164,6 +190,7 @@
       .num-p {
         color: #666666;
         font-size: 0.93rem;
+
         span {
           margin-left: 10px;
         }

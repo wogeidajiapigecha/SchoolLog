@@ -21,15 +21,15 @@
       </div>
       <van-row>
         <van-col span="8" class="tri-block tri-1">
-          <p>25</p>
+          <p>{{num_should}}</p>
           <p>应到人数</p>
         </van-col>
         <van-col span="8" class="tri-block tri-2">
-          <p>25</p>
+          <p>{{num_actual}}</p>
           <p>实到人数</p>
         </van-col>
         <van-col span="8" class="tri-block tri-3">
-          <p>25</p>
+          <p>{{num_miss}}</p>
           <p>缺到人数</p>
         </van-col>
       </van-row>
@@ -42,10 +42,9 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-b.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{today}}</p>
         </div>
-        <p class="describe">国庆将放假七天，请老师做好学生放假安排工作。国庆将放假七天，请老师做好学生放假安排工作。 国庆将放假七天，请老师做好学生放假安排工作。
-          国庆将放假七天，请老师做好学生放假安排工作。 </p>
+        <p class="describe">{{remark}} </p>
       </div>
     </div>
 
@@ -56,9 +55,9 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-o.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{today}}</p>
         </div>
-        <p class="describe">制定下学期新生家长会学生处年级协调委员会 </p>
+        <p class="describe">{{event}} </p>
       </div>
     </div>
 
@@ -74,15 +73,15 @@
       </div>
       <van-row>
         <van-col span="8" class="tri-block tri-1">
-          <p>25</p>
+          <p>{{total_class}}</p>
           <p>总班级</p>
         </van-col>
         <van-col span="8" class="tri-block tri-2">
-          <p>25</p>
+          <p>{{finished_class}}</p>
           <p>已完成</p>
         </van-col>
         <van-col span="8" class="tri-block tri-3">
-          <p>25</p>
+          <p>{{unfinish_class}}</p>
           <p>未完成</p>
         </van-col>
       </van-row>
@@ -91,17 +90,28 @@
 </template>
 
 <script>
+  import officeApi from '@/components/office/office.js'
   export default {
     name: "today",
     data() {
       return {
         t: "",//时间
-        name: "黄奕韵",//姓名
+        name: this.$cookies.get("username"),//姓名
         d: "",//时间
+        num_should: "0",
+        num_actual: "- -",
+        num_miss: "- -",
+        today:PubFuc.getToDay(),
+        remark:"",
+        event:"",
+        total_class:"",
+        finished_class:"",
+        unfinish_class:"",
       }
     },
     mounted() {
       this.getD();
+      this.getTeachersNum()
     },
     methods: {
       getD: function () {
@@ -123,7 +133,32 @@
         let weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
         this.d = y + "年" + m + "月" + d + "日 " + weekday[dd]
       },
+      getTeachersNum() {
+        officeApi.getTeachers(this.$cookies.get("divisionid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
+          debugger
+          if (res[0]) {
+            if (res[0]["tea_num"]) this.num_should = res[0]["tec_num_total"]
+            if(res[0]["num_actual_yx"]==0){
 
+            }
+            if (res[0]["num_actual"] && res[0]["num_actual"] != null) {
+              this.num_actual = res[0]["num_actual"]
+            } else {
+              this.num_actual = '- -'
+            }
+            if ((res[0]["num_miss"] && res[0]["num_miss"] != null)||res[0]["num_miss"]==0) {
+              this.num_miss = res[0]["num_miss"]
+            } else {
+              this.num_miss = '- -'
+            }
+            if ((res[0]["remark"] && res[0]["remark"] != "")||res[0]["remark"]==0) {
+              this.remark = res[0]["remark"]
+            }else{
+              this.remark = "暂无"
+            }
+          }
+        })
+      }
     }
   }
 </script>

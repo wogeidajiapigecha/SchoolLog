@@ -2,11 +2,11 @@
   <div class="me-body">
     <div class="card">
       <div class="card-div school xlr-yt">
-        <p>苏州外国语学校</p>
+        <p>{{schoolName}}</p>
         <img src="../../assets/img/head.jpg"/>
       </div>
       <div class="card-div xl-yb">
-        <p class="name">黄奕韵</p>
+        <p class="name">{{username}}</p>
       </div>
     </div>
 
@@ -53,29 +53,52 @@
 </template>
 
 <script>
+  import teacherApi from '@/components/teacher/teacher.js'
+
   export default {
     name: "Me",
     data() {
       return {
-        classValue: '实验一（1）班',
-        lanValue: '中文',
+        schoolName:this.$cookies.get("schoolname"),
+        username:this.$cookies.get("username"),
+        classValue: this.$cookies.get("grade") + " " + this.$cookies.get("classname"),
         showClassPicker: false,
+        lanValue: '中文',
         showLanPicker: false,
         classList: ['实验一（1）班', '实验一（2）班', '实验一（3）班'],
         lanList: ['中文', '英语'],
       };
     },
+    mounted() {
+      this.getClassList()
+    },
     methods: {
       onConfirmClass(value) {
-        this.classValue = value;
+        this.classValue = value.text;
         this.showClassPicker = false;
+        this.$cookies.set("grade", value.grade)
+        this.$cookies.set("classname", value.classname)
+        this.$cookies.set("classid", value.classid)
       },
-
       onConfirmLan(value) {
         this.lanValue = value;
-        localStorage.setItem('language',value)
+        localStorage.setItem('language', value)
         this.showLanPicker = false;
       },
+      getClassList() {
+        teacherApi.getClass(this.$cookies.get("userid"), "2019").then(res => {
+          let resList = []
+          for (let i = 0; i < res.length; i++) {
+            resList.push({
+              text: res[i]["grade"] + " " + res[i]["class"],
+              classid: res[i]["id"],
+              classname:res[i]["class"],
+              grade:res[i]["grade"]
+            })
+          }
+          this.classList = resList
+        })
+      }
     }
   }
 </script>
@@ -99,12 +122,12 @@
         height: 50%;
 
 
-
         p {
           color: #3C4652;
           font-size: 1.43rem;
         }
       }
+
       .school {
         p {
           color: #7F7F8A;

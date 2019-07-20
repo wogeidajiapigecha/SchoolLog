@@ -21,15 +21,15 @@
       </div>
       <van-row>
         <van-col span="8" class="tri-block tri-1">
-          <p>25</p>
+          <p>{{num_should}}</p>
           <p>应到人数</p>
         </van-col>
         <van-col span="8" class="tri-block tri-2">
-          <p>25</p>
+          <p>{{num_actual}}</p>
           <p>实到人数</p>
         </van-col>
         <van-col span="8" class="tri-block tri-3">
-          <p>25</p>
+          <p>{{num_miss}}</p>
           <p>缺到人数</p>
         </van-col>
       </van-row>
@@ -42,27 +42,34 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-b.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{today}}</p>
         </div>
-        <p class="describe">国庆将放假七天，请老师做好学生放假安排工作。国庆将放假七天，请老师做好学生放假安排工作。 国庆将放假七天，请老师做好学生放假安排工作。
-          国庆将放假七天，请老师做好学生放假安排工作。 </p>
+        <p class="describe">{{remark}} </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import teacherApi from '@/components/teacher/teacher.js'
+
   export default {
     name: "today",
     data() {
       return {
         t: "",//时间
-        name: "黄奕韵",//姓名
+        name: this.$cookies.get("username"),//姓名
         d: "",//时间
+        num_should: "0",
+        num_actual: "- -",
+        num_miss: "- -",
+        today:PubFuc.getToDay(),
+        remark:""
       }
     },
     mounted() {
       this.getD();
+      this.getStudentsNum()
     },
     methods: {
       getD: function () {
@@ -84,6 +91,28 @@
         let weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
         this.d = y + "年" + m + "月" + d + "日 " + weekday[dd]
       },
+      getStudentsNum() {
+        teacherApi.getStudents(this.$cookies.get("classid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
+          if (res[0]) {
+            if (res[0]["stu_num"]) this.num_should = res[0]["stu_num"]
+            if ((res[0]["num_actual"] && res[0]["num_actual"] != null)||res[0]["num_actual"]==0) {
+              this.num_actual = res[0]["num_actual"]
+            } else {
+              this.num_actual = '- -'
+            }
+            if ((res[0]["num_miss"] && res[0]["num_miss"] != null)||res[0]["num_miss"]==0) {
+              this.num_miss = res[0]["num_miss"]
+            } else {
+              this.num_miss = '- -'
+            }
+            if ((res[0]["remark"] && res[0]["remark"] != "")||res[0]["remark"]==0) {
+              this.remark = res[0]["remark"]
+            }else{
+              this.remark = "暂无"
+            }
+          }
+        })
+      }
 
     }
   }

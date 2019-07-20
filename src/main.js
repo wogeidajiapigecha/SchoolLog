@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios'
 import i18n from './i18n'
 
 import './assets/font/font.scss';
@@ -15,10 +16,18 @@ import { Icon } from 'vant';
 import { Field } from 'vant';
 import { Picker } from 'vant';
 import { Popup } from 'vant';
+import { Notify } from 'vant';
+import { Cell, CellGroup } from 'vant';
 
 import { Locale } from 'vant';
 // import enUS from 'vant/lib/locale/lang/en-US';
 import zhCN from 'vant/lib/locale/lang/zh-CN';
+
+import VueCookies from 'vue-cookies'
+import Qs from 'qs'   //引入方式
+Vue.prototype.$qs = Qs  //全局加载
+
+Vue.use(VueCookies)
 
 Locale.use('en-US', zhCN);
 
@@ -29,8 +38,12 @@ Vue.use(Icon);
 Vue.use(Field);
 Vue.use(Picker);
 Vue.use(Popup);
+Vue.use(Notify);
+Vue.use(Cell).use(CellGroup);
 
 Vue.config.productionTip = false
+
+Vue.prototype.$axios = axios;
 
 /* eslint-disable no-new */
 new Vue({

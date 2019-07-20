@@ -53,6 +53,19 @@ export default {
         active_3: w2,
       }
     }
+  },
+  mounted() {
+    this.login()
+  },
+  methods:{
+    login(){
+      this.$cookies.set("schoolname", "苏州XXX学校")
+      this.$cookies.set("schoolid", 1)
+      this.$cookies.set("divisionname", "高中部")
+      this.$cookies.set("divisionid", 1)
+      this.$cookies.set("username", "黄奕韵")
+      this.$cookies.set("userid", 2)
+    }
   }
 }
 </script>

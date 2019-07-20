@@ -3,19 +3,19 @@
     <div class="re-block xl-yc">
       <p>应到人数:</p>
       <van-cell-group>
-        <van-field v-model="ydPeople" placeholder=""/>
+        <van-field v-model="form.num_should" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
       <p>实到人数:</p>
       <van-cell-group>
-        <van-field v-model="sdPeople" placeholder=""/>
+        <van-field v-model="form.num_actual" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
       <p>缺席人数:</p>
       <van-cell-group>
-        <van-field v-model="qxPeople" placeholder=""/>
+        <van-field v-model="form.num_miss" placeholder=""/>
       </van-cell-group>
     </div>
 
@@ -23,25 +23,81 @@
       <div class="b-head xlr-yc">
         <p class="b-title">备注</p>
       </div>
-      <textarea class="record-content">
-      {{remark}}
-    </textarea>
+      <textarea class="record-content" v-model="form.remark">
+      </textarea>
     </div>
 
-    <van-button :loading="load" loading-text="保存中" class="save">保存记录</van-button>
+    <van-button :loading="load" loading-text="保存中" class="save" @click="saveRecord">保存记录</van-button>
   </div>
 </template>
 
 <script>
+  import teacherApi from '@/components/teacher/teacher.js'
+
   export default {
     name: "Record",
     data() {
       return {
         load: false,//按钮加载
-        ydPeople: 35,//应到人数
-        sdPeople: 35,//实到人数
-        qxPeople: 35,//缺席人数
-        remark: "12324234",//备注
+        form: {
+          reco_date: PubFuc.getToDay(),
+          class_id: this.$cookies.get("classid"),
+          reco_week: PubFuc.getXingQi(),
+          school: this.$cookies.get("schoolname"),
+          division: this.$cookies.get("divisionname"),
+          grade: this.$cookies.get("grade"),
+          classname: this.$cookies.get("classname"),
+          num_should: "",
+          num_actual: "",
+          num_miss: "",
+          remark: "",
+          reco_people: this.$cookies.get("username"),
+          reco_time: PubFuc.getToDayAll(),
+          check_people: this.$cookies.get("username"),
+          check_time: PubFuc.getToDayAll()
+        }
+      }
+    },
+    mounted() {
+      this.getStudentsNum()
+    },
+    methods: {
+      getStudentsNum() {
+        teacherApi.getStudents(this.$cookies.get("classid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
+          if (res[0]) {
+            if (res[0]["stu_num"]) this.form.num_should = res[0]["stu_num"]
+            if ((res[0]["num_actual"] && res[0]["num_actual"] != null)||res[0]["num_actual"]==0) {
+              this.form.num_actual = res[0]["num_actual"]
+            } else {
+              this.form.num_actual = ''
+            }
+            if ((res[0]["num_miss"] && res[0]["num_actual"] != null)||res[0]["num_miss"]==0) {
+              this.form.num_miss = res[0]["num_miss"]
+            } else {
+              this.form.num_miss = ''
+            }
+            if ((res[0]["remark"] && res[0]["remark"] != "")||res[0]["remark"]==0) {
+              this.form.remark = res[0]["remark"]
+            } else {
+              this.form.remark = ""
+            }
+          }
+        })
+      },
+      saveRecord() {//保存
+        this.load = true
+        let _this = this
+
+        teacherApi.postClass(_this.form).then(res => {
+          this.$notify({
+            message: '保存成功！',
+            duration: 1000,
+            background: '#008000'
+          });
+          _this.load = false
+        }).catch(error=>{
+          _this.load = false
+        })
       }
     }
   }
