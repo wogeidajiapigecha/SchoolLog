@@ -3,7 +3,8 @@
  *
  */
 window.Config = {
-  prodUrl: "http://localhost:36423",
+  // prodUrl: "http://localhost:36423",
+  prodUrl: "http://www.ssjc.suzhou.gov.cn/SZWWGJ2",
 }
 
 window.PubFuc = {

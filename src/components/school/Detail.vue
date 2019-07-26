@@ -38,7 +38,7 @@
       </div>
 
       <van-collapse v-model="activeName" accordion class="collapse">
-        <van-collapse-item :title="item.grade+' '+item.class" :name="item.id" v-for="(item,index) in classList">
+        <van-collapse-item :title="item.grade+' '+item.class" :name="item.id" v-for="(item,index) in classList" :key="item.id">
           <p>应到人数:{{item.stu_num}}</p>
           <p>实到人数:{{item.num_actual?item.num_actual:'暂未填写'}}</p>
           <p class="describe">备注：{{item.remark?item.remark:"暂无"}} </p>
