@@ -22,7 +22,7 @@
         <div class="num-circle nc-1"></div>
         <div class="num-p">
           应到:
-          <span class="nc-sp1">{{ydNum}}</span>
+          <span class="nc-sp1">{{num_should}}</span>
           人
         </div>
       </van-col>
@@ -30,7 +30,7 @@
         <div class="num-circle nc-2"></div>
         <div class="num-p">
           实到:
-          <span class="nc-sp2">{{sdNum}}</span>
+          <span class="nc-sp2">{{num_actual}}</span>
           人
         </div>
       </van-col>
@@ -38,7 +38,7 @@
         <div class="num-circle nc-3"></div>
         <div class="num-p">
           缺勤:
-          <span class="nc-sp3">{{qqNum}}</span>
+          <span class="nc-sp3">{{num_miss}}</span>
           人
         </div>
       </van-col>
@@ -51,10 +51,9 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-b.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{nTime}}</p>
         </div>
-        <p class="describe">国庆将放假七天，请老师做好学生放假安排工作。国庆将放假七天，请老师做好学生放假安排工作。 国庆将放假七天，请老师做好学生放假安排工作。
-          国庆将放假七天，请老师做好学生放假安排工作。 </p>
+        <p class="describe">{{remark}}</p>
       </div>
     </div>
 
@@ -65,14 +64,15 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-o.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{nTime}}</p>
         </div>
-        <p class="describe">制定下学期新生家长会学生处年级协调委员会 </p>
+        <p class="describe">{{event}}</p>
       </div>
     </div>
 
-
-    <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
+    <router-link tag="div" :to="{ path: '/office/remind',query:{date:nTime} }">
+      <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
+    </router-link>
 
   </div>
 </template>
@@ -80,6 +80,7 @@
 <script>
   import Calendar from 'mpvue-calendar'
   import 'mpvue-calendar/src/browser-style.css'
+  import officeApi from '@/components/office/office.js'
 
   export default {
     name: "History",
@@ -88,9 +89,12 @@
     },
     data() {
       return {
-        ydNum: 35,//应到人数
-        sdNum: 25,//实到人数
-        qqNum: 5,//缺勤人数
+        num_should: 0,//应到人数
+        num_actual: 0,//实到人数
+        num_miss: 0,//缺勤人数
+        remark: "",
+        nTime:"",
+        event:"",
 
 
         // months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -106,6 +110,11 @@
         //     {date: '2018-9-23', className: 'holiday ', content: '休'}
         // ],//为每个具体日期自定义class和插入文本内容，具体用法见下
       }
+    },
+    mounted(){
+      const now = new Date();
+      this.selected([now.getFullYear(), now.getMonth() + 1, now.getDate()],
+        {date:now.getFullYear()+"-"+(now.getMonth() + 1)+"-"+now.getDate()})
     },
     methods: {
       // prev(year, month, weekIndex) {
@@ -131,8 +140,6 @@
       //     this.$refs.calendar.renderer(2018, 8); //渲染2018年8月份
       // },
       selected(val, val2) {
-        console.log(val)
-        console.log(val2)
         // console.log(this.$refs.calendar.monthRangeDays)
         let monthArray = this.$refs.calendar.monthRangeDays
         monthArray.forEach(jj => {
@@ -145,6 +152,33 @@
               }
             })
           })
+        })
+        const dayStr = val[0] + "-" + (val[1] < 10 ? "0" + val[1] : val[1]) + "-" + (val[2] < 10 ? "0" + val[2] : val[2])
+        officeApi.getTeachers(this.$cookies.get("divisionid"), dayStr, PubFuc.getYear()).then(res => {
+          if(res[0]){
+            if (res[0]["tec_num_total"]) this.num_should = res[0]["tec_num_total"]
+            if (res[0]["num_actual_yx"] == null || res[0]["num_actual_gj"] == null) {
+              this.num_actual = '- -'
+            } else {
+              this.num_actual = res[0]["num_actual_yx"] + res[0]["num_actual_gj"]
+            }
+            if (res[0]["num_miss_yx"] == null || res[0]["num_miss_gj"] == null) {
+              this.num_miss = '- -'
+            } else {
+              this.num_miss = res[0]["num_miss_yx"] + res[0]["num_miss_gj"]
+            }
+            if ((res[0]["remark"] && res[0]["remark"] != "") || res[0]["remark"] == 0) {
+              this.remark = res[0]["remark"]
+            } else {
+              this.remark = "暂无"
+            }
+            if ((res[0]["event"] && res[0]["event"] != "") || res[0]["event"] == 0) {
+              this.event = res[0]["event"]
+            } else {
+              this.event = "暂无"
+            }
+            this.nTime = dayStr
+          }
         })
       }
     },

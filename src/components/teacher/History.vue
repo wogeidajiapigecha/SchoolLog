@@ -72,9 +72,9 @@
     },
     data() {
       return {
-        ydNum: 35,//应到人数
-        sdNum: 25,//实到人数
-        qqNum: 5,//缺勤人数
+        ydNum: 0,//应到人数
+        sdNum: 0,//实到人数
+        qqNum: 0,//缺勤人数
         remark: "",
         nTime:"",
 

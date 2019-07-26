@@ -7,8 +7,9 @@ import axios from 'axios'
 import i18n from './i18n'
 
 import './assets/font/font.scss';
-import './assets/css/global.scss'
+import './assets/css/global.scss';
 import 'vant/lib/index.css';
+import './assets/css/common.scss';
 import { Button } from 'vant';
 import { Tabbar, TabbarItem } from 'vant';
 import { Row, Col } from 'vant';
@@ -16,6 +17,9 @@ import { Icon } from 'vant';
 import { Field } from 'vant';
 import { Picker } from 'vant';
 import { Popup } from 'vant';
+import { Tab, Tabs } from 'vant';
+import { Checkbox, CheckboxGroup } from 'vant';
+import { Collapse, CollapseItem } from 'vant';
 import { Notify } from 'vant';
 import { Cell, CellGroup } from 'vant';
 
@@ -40,6 +44,9 @@ Vue.use(Picker);
 Vue.use(Popup);
 Vue.use(Notify);
 Vue.use(Cell).use(CellGroup);
+Vue.use(Tab).use(Tabs);
+Vue.use(Checkbox).use(CheckboxGroup);
+Vue.use(Collapse).use(CollapseItem);
 
 Vue.config.productionTip = false
 

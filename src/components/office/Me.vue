@@ -2,11 +2,11 @@
   <div class="me-body">
     <div class="card">
       <div class="card-div school xlr-yt">
-        <p>苏州外国语学校</p>
+        <p>{{schoolName}}</p>
         <img src="../../assets/img/head.jpg"/>
       </div>
       <div class="card-div xl-yb">
-        <p class="name">黄奕韵</p>
+        <p class="name">{{username}}</p>
       </div>
     </div>
 
@@ -53,22 +53,31 @@
 </template>
 
 <script>
+  import officeApi from '@/components/office/office.js'
+
   export default {
     name: "Me",
     data() {
       return {
-        classValue: '高中部',
-        lanValue: '中文',
+        schoolName:this.$cookies.get("schoolname"),
+        username:this.$cookies.get("username"),
+        classValue: this.$cookies.get("divisionname"),
         showClassPicker: false,
+        lanValue: '中文',
         showLanPicker: false,
-        classList: ['初中部', '高中部'],
+        classList: [],
         lanList: ['中文', '英语'],
       };
     },
+    mounted() {
+      this.getDivisinList()
+    },
     methods: {
       onConfirmClass(value) {
-        this.classValue = value;
+        this.classValue = value.text;
         this.showClassPicker = false;
+        this.$cookies.set("divisionname", value.dinisionname)
+        this.$cookies.set("divisionid", value.divisionid)
       },
 
       onConfirmLan(value) {
@@ -76,6 +85,19 @@
         localStorage.setItem('language',value)
         this.showLanPicker = false;
       },
+      getDivisinList() {
+        officeApi.getDivision(this.$cookies.get("userid"), "2019").then(res => {
+          let resList = []
+          for (let i = 0; i < res.length; i++) {
+            resList.push({
+              text: res[i]["division"],
+              divisionid: res[i]["id"],
+              dinisionname:res[i]["class"],
+            })
+          }
+          this.classList = resList
+        })
+      }
     }
   }
 </script>

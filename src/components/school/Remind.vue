@@ -3,14 +3,17 @@
     <van-tabs type="card">
       <van-tab title="已完成">
         <div class="line xlr-yc" v-for="(item,index) in finishList" :key=index>
-          <p class="line-name">{{item.grade}} {{item.class}}</p>
-          <router-link tag="p" class="line-read" :to="{ path: '/office/detail',query:item }">
-            查看
-          </router-link>
+          <p class="line-name">{{item.division}}</p>
+          <div class="xr-yc">
+            <router-link tag="p"  class="line-read mr" :to="{ path: '/school/detail',query:item }">
+              查看
+            </router-link>
+            <p class="line-read">生成pdf</p>
+          </div>
         </div>
       </van-tab>
       <van-tab title="未完成">
-        <div class="xr-yc warn-together" @click="alerts">
+        <div class="xr-yc warn-together">
           <img src="../../assets/img/warn.png" class="warning"/>
           批量提醒
         </div>
@@ -20,7 +23,7 @@
             :key="item.id"
             :name="item"
           >
-            {{item.grade}} {{item.class}}
+            {{ item.division }}
           </van-checkbox>
         </van-checkbox-group>
       </van-tab>
@@ -29,7 +32,7 @@
 </template>
 
 <script>
-  import officeApi from '@/components/office/office.js'
+  import schoolApi from '@/components/school/school.js'
 
   export default {
     name: "Remind",
@@ -41,11 +44,11 @@
       }
     },
     mounted() {
-      this.getClassList()
+      this.getDivisionList()
     },
     methods:{
-      getClassList() {
-        officeApi.getClassList(this.$cookies.get("divisionid"), this.$route.query.date, PubFuc.getYear()).then(res => {
+      getDivisionList(){
+        schoolApi.getDivisionList(this.$cookies.get("schoolid"), this.$route.query.date, PubFuc.getYear()).then(res=>{
           let unfList = []
           let fList = []
           for(let i=0;i<res.length;i++){
@@ -58,10 +61,6 @@
           this.finishList = fList
           this.unFinishList = unfList
         })
-      },
-      alerts(){
-        this.result
-        debugger
       }
     }
   }
@@ -72,20 +71,20 @@
     padding: 30px 18px 60px;
     overflow-y: auto;
     width: 100%;
-
     .line {
       height: 24px;
       margin: 0 0 20px 0;
-
       .line-name {
         color: #666666;
         font-size: 0.875rem;
       }
-
       .line-read {
         color: #4B77B0;
         font-size: 0.875rem;
         cursor: pointer;
+      }
+      .mr {
+        margin-right: 10px;
       }
     }
 
@@ -93,7 +92,6 @@
       color: #FF4A53;
       font-size: 0.875rem;
       margin-bottom: 10px;
-
       .warning {
         width: 11px;
         margin-right: 5px;

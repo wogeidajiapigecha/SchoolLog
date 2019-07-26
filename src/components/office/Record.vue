@@ -1,6 +1,6 @@
 <template>
   <div class="re-body">
-    <div>
+    <div style="margin-top: 24px;">
       <div class="b-head xlr-yc">
         <p class="b-title">一线教师</p>
       </div>
@@ -8,19 +8,19 @@
       <div class="re-block xl-yc">
         <p>应到人数:</p>
         <van-cell-group>
-          <van-field v-model="ydPeople" placeholder=""/>
+          <van-field v-model="form.num_should_yx" placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
         <p>实到人数:</p>
         <van-cell-group>
-          <van-field v-model="sdPeople" placeholder=""/>
+          <van-field v-model="form.num_actual_yx" placeholder=""/>
         </van-cell-group>
       </div>
     </div>
 
 
-    <div style="margin-top: 20px;">
+    <div style="margin-top: 24px;">
       <div class="b-head xlr-yc">
         <p class="b-title">国际教师</p>
       </div>
@@ -28,13 +28,13 @@
       <div class="re-block xl-yc">
         <p>应到人数:</p>
         <van-cell-group>
-          <van-field v-model="ydPeople" placeholder=""/>
+          <van-field v-model="form.num_should_gj" placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
         <p>实到人数:</p>
         <van-cell-group>
-          <van-field v-model="sdPeople" placeholder=""/>
+          <van-field v-model="form.num_actual_gj" placeholder=""/>
         </van-cell-group>
       </div>
     </div>
@@ -43,8 +43,7 @@
       <div class="b-head xlr-yc">
         <p class="b-title">备注</p>
       </div>
-      <textarea class="record-content">
-      {{remark}}
+      <textarea class="record-content" v-model="form.remark">
     </textarea>
     </div>
 
@@ -52,25 +51,99 @@
       <div class="b-head xlr-yc">
         <p class="b-title">重要活动</p>
       </div>
-      <textarea class="record-content">
-      {{remark}}
+      <textarea class="record-content" v-model="form.events">
     </textarea>
     </div>
 
-    <van-button :loading="load" loading-text="保存中" class="save">保存记录</van-button>
+    <van-button :loading="load" loading-text="保存中" class="save" @click="saveRecord">保存记录</van-button>
   </div>
 </template>
 
 <script>
+  import officeApi from '@/components/office/office.js'
+
   export default {
     name: "Record",
     data() {
       return {
         load: false,//按钮加载
-        ydPeople: 35,//应到人数
-        sdPeople: 35,//实到人数
-        qxPeople: 35,//缺席人数
-        remark: "12324234",//备注
+        form: {
+          reco_date: PubFuc.getToDay(),
+          division_id: this.$cookies.get("divisionid"),
+          reco_week: PubFuc.getXingQi(),
+          school: this.$cookies.get("schoolname"),
+          division: this.$cookies.get("divisionname"),
+          num_should_yx: "",
+          num_actual_yx: "",
+          num_miss_yx: "",
+          num_should_gj: "",
+          num_actual_gj: "",
+          num_miss_gj: "",
+          remark: "",
+          events: "",
+          reco_people: this.$cookies.get("username"),
+          reco_time: PubFuc.getToDayAll(),
+          check_people: this.$cookies.get("username"),
+          check_time: PubFuc.getToDayAll()
+        }
+      }
+    },
+    mounted() {
+      this.getTeachersNum()
+    },
+    methods:{
+      getTeachersNum() {
+        officeApi.getTeachers(this.$cookies.get("divisionid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
+          if (res[0]) {
+            this.form.num_should_yx = res[0]["tec_num_yx"]?res[0]["tec_num_yx"]+"":""
+            this.form.num_actual_yx=res[0]["num_actual_yx"]?res[0]["num_actual_yx"]+"":""
+            this.form.num_miss_yx=res[0]["num_miss_yx"]?res[0]["num_miss_yx"]+"":""
+            this.form.num_should_gj = res[0]["tec_num_gj"]?res[0]["tec_num_gj"]+"":""
+            this.form.num_actual_gj=res[0]["num_actual_gj"]?res[0]["num_actual_gj"]+"":""
+            this.form.num_miss_gj=res[0]["num_miss_gj"]?res[0]["num_miss_gj"]+"":""
+            this.form.remark = res[0]["remark"]?res[0]["remark"]:""
+            this.form.events = res[0]["event"]?res[0]["event"]:""
+          }
+        })
+      },
+      saveRecord() {//保存
+        this.load = true
+        let _this = this
+        let r = /^\+?[1-9][0-9]*$/
+        if(this.form.num_should_yx==""||this.form.num_actual_yx==""
+          ||this.form.num_should_gj==""||this.form.num_actual_gj==""
+        ){
+          this.$notify({
+            message: '请填写完整实到人数、应到人数！',
+            duration: 2000,
+          });
+          _this.load = false
+          return
+        }else if(!r.test(this.form.num_should_yx)||!r.test(this.form.num_actual_yx)
+          ||!r.test(this.form.num_should_gj)||!r.test(this.form.num_actual_gj)){
+          this.$notify({
+            message: '请填写实到人数、应到人数为数字格式',
+            duration: 2000,
+          });
+          _this.load = false
+          return
+        }
+        this.form.num_miss_yx = this.form.num_should_yx-this.form.num_actual_yx
+        this.form.num_miss_gj = this.form.num_should_gj-this.form.num_actual_gj
+        officeApi.postDivision(_this.form).then(res => {
+          this.$notify({
+            message: '保存成功！',
+            duration: 1000,
+            background: '#008000'
+          });
+          _this.load = false
+        }).catch(error=>{
+          this.$notify({
+            message: '保存失败！',
+            duration: 1000,
+          });
+          _this.load = false
+        })
       }
     }
   }
@@ -86,7 +159,6 @@
       width: calc(100% - 10px);
       height: 15px;
       padding-left: 7px;
-      margin-bottom: 20px;
       border-left: 3px solid #333333;
 
       .b-title {

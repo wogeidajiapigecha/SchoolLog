@@ -2,11 +2,11 @@
   <div class="me-body">
     <div class="card">
       <div class="card-div school xlr-yt">
-        <p>苏州外国语学校</p>
+        <p>{{schoolName}}</p>
         <img src="../../assets/img/head.jpg"/>
       </div>
       <div class="card-div xl-yb">
-        <p class="name">黄奕韵</p>
+        <p class="name">{{username}}</p>
       </div>
     </div>
 
@@ -47,6 +47,8 @@
     name: "Me",
     data() {
       return {
+        schoolName:this.$cookies.get("schoolname"),
+        username:this.$cookies.get("username"),
         classValue: '实验一（1）班',
         lanValue: '中文',
         showClassPicker: false,

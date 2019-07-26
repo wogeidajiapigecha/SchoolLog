@@ -12,7 +12,7 @@
     <div class="today-block today-block-1">
       <div class="b-head xlr-yc">
         <p class="b-title">今日学部记录情况</p>
-        <router-link tag="div" :to="{ path: '/school/record' }">
+        <router-link tag="div" :to="{ path: '/school/remind',query:{date:today} }">
           <div class="xl-yc">
             <van-icon name="add-o" color="#346AFF"/>
             <p class="b-tt">提醒</p>
@@ -21,15 +21,15 @@
       </div>
       <van-row>
         <van-col span="8" class="tri-block tri-1">
-          <p>25</p>
+          <p>{{num_total}}</p>
           <p>学部</p>
         </van-col>
         <van-col span="8" class="tri-block tri-2">
-          <p>25</p>
+          <p>{{num_finish}}</p>
           <p>已完成</p>
         </van-col>
         <van-col span="8" class="tri-block tri-3">
-          <p>25</p>
+          <p>{{num_unFinish}}</p>
           <p>未完成</p>
         </van-col>
       </van-row>
@@ -39,17 +39,24 @@
 </template>
 
 <script>
+  import schoolApi from '@/components/school/school.js'
+
   export default {
     name: "today",
     data() {
       return {
         t: "",//时间
-        name: "校办",//姓名
+        name: this.$cookies.get("username"),//姓名
         d: "",//时间
+        today: PubFuc.getToDay(),
+        num_total: "",
+        num_finish: "",
+        num_unFinish: ""
       }
     },
     mounted() {
       this.getD();
+      this.getDivision()
     },
     methods: {
       getD: function () {
@@ -71,7 +78,13 @@
         let weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
         this.d = y + "年" + m + "月" + d + "日 " + weekday[dd]
       },
-
+      getDivision() {
+        schoolApi.getDivisionNum(this.$cookies.get("schoolid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
+          this.num_total = res[0]["total"]
+          this.num_finish = res[0]["finished"]
+          this.num_unFinish = res[0]["total"] - res[0]["finished"]
+        })
+      }
     }
   }
 </script>

@@ -65,7 +65,7 @@
         showClassPicker: false,
         lanValue: '中文',
         showLanPicker: false,
-        classList: ['实验一（1）班', '实验一（2）班', '实验一（3）班'],
+        classList: [],
         lanList: ['中文', '英语'],
       };
     },

@@ -22,7 +22,7 @@
         <div class="num-circle nc-1"></div>
         <div class="num-p">
           应到:
-          <span class="nc-sp1">{{ydNum}}</span>
+          <span class="nc-sp1">{{num_should}}</span>
           人
         </div>
       </van-col>
@@ -30,18 +30,18 @@
         <div class="num-circle nc-2"></div>
         <div class="num-p">
           实到:
-          <span class="nc-sp2">{{sdNum}}</span>
+          <span class="nc-sp2">{{num_actual}}</span>
           人
         </div>
       </van-col>
-        <van-col span="8" class="xr-yc">
-          <div class="num-circle nc-3"></div>
-          <div class="num-p">
-            缺勤:
-            <span class="nc-sp3">{{qqNum}}</span>
-            人
-          </div>
-        </van-col>
+      <van-col span="8" class="xr-yc">
+        <div class="num-circle nc-3"></div>
+        <div class="num-p">
+          缺勤:
+          <span class="nc-sp3">{{num_miss}}</span>
+          人
+        </div>
+      </van-col>
     </van-row>
 
     <div class="today-block">
@@ -51,10 +51,9 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-b.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{nTime}}</p>
         </div>
-        <p class="describe">国庆将放假七天，请老师做好学生放假安排工作。国庆将放假七天，请老师做好学生放假安排工作。 国庆将放假七天，请老师做好学生放假安排工作。
-          国庆将放假七天，请老师做好学生放假安排工作。 </p>
+        <p class="describe">{{remark}}</p>
       </div>
     </div>
 
@@ -65,14 +64,16 @@
       <div class="today-content">
         <div class="xl-yc">
           <img class="cir-b" src="../../assets/img/cir-o.png"/>
-          <p class="time">2019.06.29</p>
+          <p class="time">{{nTime}}</p>
         </div>
-        <p class="describe">制定下学期新生家长会学生处年级协调委员会 </p>
+        <p class="describe">{{event}}</p>
       </div>
     </div>
 
+    <router-link tag="div" :to="{ path: '/school/remind',query:{date:nTime} }">
+      <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
+    </router-link>
 
-    <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
 
   </div>
 </template>
@@ -80,6 +81,7 @@
 <script>
   import Calendar from 'mpvue-calendar'
   import 'mpvue-calendar/src/browser-style.css'
+  import schoolApi from '@/components/school/school.js'
 
   export default {
     name: "History",
@@ -88,10 +90,12 @@
     },
     data() {
       return {
-        ydNum: 35,//应到人数
-        sdNum: 25,//实到人数
-        qqNum: 5,//缺勤人数
-
+        num_should: 0,//应到人数
+        num_actual: 0,//实到人数
+        num_miss: 0,//缺勤人数
+        remark: "",
+        nTime: "",
+        event: "",
 
         // months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         // // disabledArray: ['2018-6-27','2018-6-25'],
@@ -106,6 +110,11 @@
         //     {date: '2018-9-23', className: 'holiday ', content: '休'}
         // ],//为每个具体日期自定义class和插入文本内容，具体用法见下
       }
+    },
+    mounted() {
+      const now = new Date();
+      this.selected([now.getFullYear(), now.getMonth() + 1, now.getDate()],
+        {date: now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()})
     },
     methods: {
       // prev(year, month, weekIndex) {
@@ -131,8 +140,6 @@
       //     this.$refs.calendar.renderer(2018, 8); //渲染2018年8月份
       // },
       selected(val, val2) {
-        console.log(val)
-        console.log(val2)
         // console.log(this.$refs.calendar.monthRangeDays)
         let monthArray = this.$refs.calendar.monthRangeDays
         monthArray.forEach(jj => {
@@ -145,6 +152,36 @@
               }
             })
           })
+        })
+        const dayStr = val[0] + "-" + (val[1] < 10 ? "0" + val[1] : val[1]) + "-" + (val[2] < 10 ? "0" + val[2] : val[2])
+        schoolApi.getDivisionList(this.$cookies.get("schoolid"), dayStr, PubFuc.getYear()).then(res => {
+          this.nTime = dayStr
+          let should = 0
+          let actual = 0
+          for (let i = 0; i < res.length; i++) {
+            should += res[i]["tec_num_total"] / 1
+          }
+          for (let j = 0; j < res.length; j++) {
+            if (res[j]["isFinish"]/1==0) {
+              actual = -1
+              break
+            } else {
+              actual += res[j]["num_actual_yx"] + res[j]["num_actual_gj"]
+            }
+          }
+          if (actual == -1) {
+            this.num_should = should
+            this.num_actual = "- -"
+            this.num_miss = "- -"
+            this.remark = "暂无"
+            this.event = "暂无"
+            return
+          } else {
+            this.num_should = should
+            this.num_actual = actual
+            this.num_miss = should-actual
+          }
+
         })
       }
     },
@@ -180,6 +217,7 @@
       .num-p {
         color: #666666;
         font-size: 0.93rem;
+
         span {
           margin-left: 10px;
         }

@@ -5,7 +5,7 @@
     <div class="notice xl-yc">
       <img class="nt-img" src="../../assets/img/notice.png"/>
       <div class="nt-p">
-        <span>{{t}}好！{{name}}（PYP实验一（1）班），今天是{{d}}！</span>
+        <span>{{t}}好！{{name}}（{{grade}} {{classname}}），今天是{{d}}！</span>
       </div>
     </div>
 
@@ -59,6 +59,8 @@
       return {
         t: "",//时间
         name: this.$cookies.get("username"),//姓名
+        grade:this.$cookies.get("grade"),
+        classname:this.$cookies.get("classname"),
         d: "",//时间
         num_should: "0",
         num_actual: "- -",

@@ -5,7 +5,7 @@
     <div class="notice xl-yc">
       <img class="nt-img" src="../../assets/img/notice.png"/>
       <div class="nt-p">
-        <span>{{t}}好！{{name}}（高中部），今天是{{d}}！</span>
+        <span>{{t}}好！{{name}}（{{division}}），今天是{{d}}！</span>
       </div>
     </div>
 
@@ -64,7 +64,7 @@
     <div class="today-block today-block-1">
       <div class="b-head xlr-yc">
         <p class="b-title">今日教师记录情况</p>
-        <router-link tag="div" :to="{ path: '/office/remind' }">
+        <router-link tag="div" :to="{ path: '/office/remind',query:{date:today} }">
           <div class="xl-yc">
             <van-icon name="add-o" color="#346AFF"/>
             <p class="b-tt">提醒</p>
@@ -91,27 +91,30 @@
 
 <script>
   import officeApi from '@/components/office/office.js'
+
   export default {
     name: "today",
     data() {
       return {
         t: "",//时间
         name: this.$cookies.get("username"),//姓名
+        division:this.$cookies.get("divisionname"),
         d: "",//时间
         num_should: "0",
         num_actual: "- -",
         num_miss: "- -",
-        today:PubFuc.getToDay(),
-        remark:"",
-        event:"",
-        total_class:"",
-        finished_class:"",
-        unfinish_class:"",
+        today: PubFuc.getToDay(),
+        remark: "",
+        event: "",
+        total_class: "",
+        finished_class: "",
+        unfinish_class: "",
       }
     },
     mounted() {
       this.getD();
       this.getTeachersNum()
+      this.getClassInfo()
     },
     methods: {
       getD: function () {
@@ -135,30 +138,42 @@
       },
       getTeachersNum() {
         officeApi.getTeachers(this.$cookies.get("divisionid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
-          debugger
           if (res[0]) {
-            if (res[0]["tea_num"]) this.num_should = res[0]["tec_num_total"]
-            if(res[0]["num_actual_yx"]==0){
-
-            }
-            if (res[0]["num_actual"] && res[0]["num_actual"] != null) {
-              this.num_actual = res[0]["num_actual"]
-            } else {
+            if (res[0]["tec_num_total"]) this.num_should = res[0]["tec_num_total"]
+            if (res[0]["num_actual_yx"] == null || res[0]["num_actual_gj"] == null) {
               this.num_actual = '- -'
-            }
-            if ((res[0]["num_miss"] && res[0]["num_miss"] != null)||res[0]["num_miss"]==0) {
-              this.num_miss = res[0]["num_miss"]
             } else {
-              this.num_miss = '- -'
+              this.num_actual = res[0]["num_actual_yx"] + res[0]["num_actual_gj"]
             }
-            if ((res[0]["remark"] && res[0]["remark"] != "")||res[0]["remark"]==0) {
+            if (res[0]["num_miss_yx"] == null || res[0]["num_miss_gj"] == null) {
+              this.num_miss = '- -'
+            } else {
+              this.num_miss = res[0]["num_miss_yx"] + res[0]["num_miss_gj"]
+            }
+            if ((res[0]["remark"] && res[0]["remark"] != "") || res[0]["remark"] == 0) {
               this.remark = res[0]["remark"]
-            }else{
+            } else {
               this.remark = "暂无"
+            }
+            if ((res[0]["event"] && res[0]["event"] != "") || res[0]["event"] == 0) {
+              this.event = res[0]["event"]
+            } else {
+              this.event = "暂无"
             }
           }
         })
-      }
+      },
+      getClassInfo() {
+        officeApi.getClassList(this.$cookies.get("divisionid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
+          this.total_class = res.length
+          let k =  0
+          for(let i = 0;i<res.length;i++){
+            if(res[i]["isFinish"] == 1) k++
+          }
+          this.finished_class = k
+          this.unfinish_class = res.length - k
+        })
+      },
     }
   }
 </script>

@@ -1,54 +1,64 @@
 <template>
-  <div class="re-body">
-    <div class="re-block xl-yc">
-      <p>应到人数:</p>
-      <van-cell-group>
-        <van-field v-model="ydPeople" placeholder=""/>
-      </van-cell-group>
-    </div>
-    <div class="re-block xl-yc">
-      <p>实到人数:</p>
-      <van-cell-group>
-        <van-field v-model="sdPeople" placeholder=""/>
-      </van-cell-group>
-    </div>
-    <div class="re-block xl-yc">
-      <p>缺席人数:</p>
-      <van-cell-group>
-        <van-field v-model="qxPeople" placeholder=""/>
-      </van-cell-group>
+  <div class="de-body">
+    <div>
+      <div class="re-block xl-yc">
+        <p>应到人数:</p>
+        <van-cell-group>
+          <van-field v-model="ydPeople" disabled placeholder=""/>
+        </van-cell-group>
+      </div>
+      <div class="re-block xl-yc">
+        <p>实到人数:</p>
+        <van-cell-group>
+          <van-field v-model="sdPeople" disabled placeholder=""/>
+        </van-cell-group>
+      </div>
     </div>
 
     <div class="record-block">
       <div class="b-head xlr-yc">
         <p class="b-title">备注</p>
       </div>
-      <textarea class="record-content" :model="remark">
+      <textarea disabled class="record-content" :model="remark">
     </textarea>
     </div>
 
-    <van-button :loading="load" loading-text="保存中" class="save">保存记录</van-button>
+    <router-link tag="div" :to="{ path: '/office/remind',query:{date:date} }">
+      <van-button :loading="load" loading-text="返回中" class="save">返回</van-button>
+    </router-link>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Record",
+    name: "Detail",
     data() {
       return {
         load: false,//按钮加载
-        ydPeople: 35,//应到人数
-        sdPeople: 35,//实到人数
-        qxPeople: 35,//缺席人数
-        remark: "12324234",//备注
+        ydPeople: "",//应到人数
+        sdPeople: "",//实到人数
+        remark: "",//备注
+        date:"",
+      }
+    },
+    mounted() {
+      this.getClassInfo()
+    },
+    methods:{
+      getClassInfo(){
+        let item = this.$route.query;
+        this.ydPeople = item["num_should"]
+        this.sdPeople = item["num_actual"]
+        this.remark = item["remark"]
+        this.date = item["reco_date"]
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .re-body {
-    padding: 20px 18px 60px;
+  .de-body {
+    padding: 30px 18px 60px;
     overflow-y: auto;
     width: 100%;
 
@@ -77,7 +87,7 @@
 
     .record-block {
       width: 100%;
-      padding: 22px 0;
+      padding: 20px 0;
       height: auto;
 
       .b-head {
@@ -85,6 +95,7 @@
         height: 15px;
         padding-left: 7px;
         margin-bottom: 17px;
+        margin-top: 24px;
         border-left: 3px solid #333333;
 
         .b-title {
@@ -109,7 +120,6 @@
         font-size: 0.81rem;
       }
     }
-
     .save {
       width: 66%;
       height: 40px;
@@ -121,5 +131,6 @@
       font-size: 0.937rem;
       border-radius: 2px;
     }
+
   }
 </style>

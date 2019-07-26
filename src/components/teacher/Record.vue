@@ -65,14 +65,14 @@
       getStudentsNum() {
         teacherApi.getStudents(this.$cookies.get("classid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
           if (res[0]) {
-            if (res[0]["stu_num"]) this.form.num_should = res[0]["stu_num"]
+            if (res[0]["stu_num"]) this.form.num_should = res[0]["stu_num"]+""
             if ((res[0]["num_actual"] && res[0]["num_actual"] != null)||res[0]["num_actual"]==0) {
-              this.form.num_actual = res[0]["num_actual"]
+              this.form.num_actual = res[0]["num_actual"]+""
             } else {
               this.form.num_actual = ''
             }
             if ((res[0]["num_miss"] && res[0]["num_actual"] != null)||res[0]["num_miss"]==0) {
-              this.form.num_miss = res[0]["num_miss"]
+              this.form.num_miss = res[0]["num_miss"]+""
             } else {
               this.form.num_miss = ''
             }
@@ -87,6 +87,24 @@
       saveRecord() {//保存
         this.load = true
         let _this = this
+        let r = /^\+?[1-9][0-9]*$/
+        if(this.form.num_should==""||this.form.num_actual==""||this.form.num_miss==""){
+          this.$notify({
+            message: '请填写完整实到人数、应到人数、缺勤人数！',
+            duration: 2000,
+          });
+          _this.load = false
+          return
+        }else if(!r.test(this.form.num_should)
+          ||!r.test(this.form.num_actual)
+          ||!r.test(this.form.num_miss)){
+          this.$notify({
+            message: '请填写实到人数、应到人数、缺勤人数为数字格式',
+            duration: 2000,
+          });
+          _this.load = false
+          return
+        }
 
         teacherApi.postClass(_this.form).then(res => {
           this.$notify({
