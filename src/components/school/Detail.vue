@@ -1,37 +1,37 @@
 <template>
   <div class="re-body">
     <div class="re-block xl-yc">
-      <p>学部:</p>
+      <p>{{$t("department")}}:</p>
       <van-cell-group>
         <van-field v-model="divisionName" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
-      <p>时间:</p>
+      <p>{{$t("time")}}:</p>
       <van-cell-group>
         <van-field v-model="time" placeholder=""/>
       </van-cell-group>
     </div>
 
-    <div style="margin-top: 24px;">
+    <div style="margin-top: 20px;">
       <div class="b-head xlr-yc">
-        <p class="b-title">学生基本情况</p>
+        <p class="b-title">{{$t("studentSituation")}}</p>
       </div>
 
       <div class="re-block xl-yc">
-        <p>班级数量:</p>
+        <p>{{$t("class")}}:</p>
         <van-cell-group>
           <van-field v-model="classNum" placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
-        <p>学生总数:</p>
+        <p>{{$t("student")}}:</p>
         <van-cell-group>
           <van-field v-model="stuNum_total" placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
-        <p>实到人数:</p>
+        <p>{{$t("actual")}}:</p>
         <van-cell-group>
           <van-field v-model="stuNum_actual" placeholder=""/>
         </van-cell-group>
@@ -39,36 +39,36 @@
 
       <van-collapse v-model="activeName" accordion class="collapse">
         <van-collapse-item :title="item.grade+' '+item.class" :name="item.id" v-for="(item,index) in classList" :key="item.id">
-          <p>应到人数:{{item.stu_num}}</p>
-          <p>实到人数:{{item.num_actual?item.num_actual:'暂未填写'}}</p>
-          <p class="describe">备注：{{item.remark?item.remark:"暂无"}} </p>
+          <p>{{$t("expected")}}:{{item.stu_num}}</p>
+          <p>{{$t("actual")}}:{{item.num_actual?item.num_actual:'暂未填写'}}</p>
+          <p class="describe">{{$t("remark")}}：{{item.remark?item.remark:"暂无"}} </p>
         </van-collapse-item>
       </van-collapse>
     </div>
 
-    <div style="margin-top: 24px;">
+    <div style="margin-top: 20px;">
       <div class="b-head xlr-yc">
-        <p class="b-title">教师基本情况</p>
+        <p class="b-title">{{$t("teacherSituation")}}</p>
       </div>
       <div class="table">
         <table>
           <tr>
-            <th>类型</th>
-            <th>应到人数</th>
-            <th>实到人数</th>
+            <th>{{$t("type")}}</th>
+            <th>{{$t("expected")}}</th>
+            <th>{{$t("actual")}}</th>
           </tr>
           <tr>
-            <td>一线教师</td>
+            <td>{{$t("firstLine")}}</td>
             <td>{{tec_yx_should}}人</td>
             <td>{{tec_yx_actual}}人</td>
           </tr>
           <tr>
-            <td>国际教师</td>
+            <td>{{$t("internationalTeacher")}}</td>
             <td>{{tec_gj_should}}人</td>
             <td>{{tec_gj_actual}}人</td>
           </tr>
           <tr>
-            <td>合计</td>
+            <td>{{$t("total")}}</td>
             <td>{{tec_yx_should/1+tec_gj_should/1}}人</td>
             <td>{{tec_yx_actual/1+tec_gj_actual/1}}人</td>
           </tr>
@@ -78,7 +78,7 @@
 
     <div class="record-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t("remark")}}</p>
       </div>
       <textarea class="record-content" v-model="remark">
     </textarea>
@@ -86,9 +86,9 @@
 
     <div class="xc-yc">
       <router-link tag="div" class="back-router" :to="{ path: '/school/remind',query:{date:time} }">
-        <van-button :loading="load" loading-text="返回中" class="back">返回</van-button>
+        <van-button class="back">{{$t("back")}}</van-button>
       </router-link>
-      <van-button :loading="load2" loading-text="生成中" class="save">生成pdf</van-button>
+      <van-button class="save">{{$t("generate")}}</van-button>
     </div>
   </div>
 </template>

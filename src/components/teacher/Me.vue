@@ -14,7 +14,7 @@
       <div class="panel-div xlr-yc">
         <div class="panel-left xl-yc">
           <img src="../../assets/img/folder.png"/>
-          <p>我的年级</p>
+          <p>{{$t('grade')}}</p>
         </div>
         <div class="panel-right xr-yc" @click="showClassPicker = true">
           {{classValue}}
@@ -24,7 +24,7 @@
       <div class="panel-div xlr-yc">
         <div class="panel-left xl-yc">
           <img src="../../assets/img/folder.png"/>
-          <p>语言</p>
+          <p>{{$t('language')}}</p>
         </div>
         <div class="panel-right xr-yc" @click="showLanPicker = true">
           {{lanValue}}
@@ -59,18 +59,24 @@
     name: "Me",
     data() {
       return {
-        schoolName:this.$cookies.get("schoolname"),
-        username:this.$cookies.get("username"),
+        schoolName: this.$cookies.get("schoolname"),
+        username: this.$cookies.get("username"),
         classValue: this.$cookies.get("grade") + " " + this.$cookies.get("classname"),
         showClassPicker: false,
-        lanValue: '中文',
         showLanPicker: false,
         classList: [],
-        lanList: ['中文', '英语'],
+        lanValue: '中文',
+        lanList: ['中文', 'English'],
       };
     },
     mounted() {
-      this.getClassList()
+      this.getClassList();
+      if (window.localStorage.getItem('lang')=="cn") {
+        this.lanValue = "中文"
+      } else {
+        this.lanValue = "English"
+      }
+
     },
     methods: {
       onConfirmClass(value) {
@@ -82,7 +88,13 @@
       },
       onConfirmLan(value) {
         this.lanValue = value;
-        localStorage.setItem('language', value)
+        if (this.lanValue === '中文') {
+          this.$i18n.locale = 'cn'
+          window.localStorage.setItem('lang','cn')
+        } else if (this.lanValue === 'English') {
+          this.$i18n.locale = 'en'
+          window.localStorage.setItem('lang','en')
+        }
         this.showLanPicker = false;
       },
       getClassList() {
@@ -92,8 +104,8 @@
             resList.push({
               text: res[i]["grade"] + " " + res[i]["class"],
               classid: res[i]["id"],
-              classname:res[i]["class"],
-              grade:res[i]["grade"]
+              classname: res[i]["class"],
+              grade: res[i]["grade"]
             })
           }
           this.classList = resList

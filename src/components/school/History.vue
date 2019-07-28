@@ -2,77 +2,20 @@
   <div class="his-body">
     <div class="datePicker">
       <Calendar
-        :months="months"
-        :value="value"
-        :begin="begin"
-        :end="end"
         :now="false"
         :responsive="false"
         lunar
         clean
-        :monthRange="monthRange"
         @select="selected"
         :multi="false"
         ref="calendar"
       />
     </div>
 
-    <van-row class="his-num">
-      <van-col span="8" class="xl-yc">
-        <div class="num-circle nc-1"></div>
-        <div class="num-p">
-          应到:
-          <span class="nc-sp1">{{num_should}}</span>
-          人
-        </div>
-      </van-col>
-      <van-col span="8" class="xc-yc">
-        <div class="num-circle nc-2"></div>
-        <div class="num-p">
-          实到:
-          <span class="nc-sp2">{{num_actual}}</span>
-          人
-        </div>
-      </van-col>
-      <van-col span="8" class="xr-yc">
-        <div class="num-circle nc-3"></div>
-        <div class="num-p">
-          缺勤:
-          <span class="nc-sp3">{{num_miss}}</span>
-          人
-        </div>
-      </van-col>
-    </van-row>
-
-    <div class="today-block">
-      <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
-      </div>
-      <div class="today-content">
-        <div class="xl-yc">
-          <img class="cir-b" src="../../assets/img/cir-b.png"/>
-          <p class="time">{{nTime}}</p>
-        </div>
-        <p class="describe">{{remark}}</p>
-      </div>
-    </div>
-
-    <div class="today-block">
-      <div class="b-head xlr-yc">
-        <p class="b-title">重要活动</p>
-      </div>
-      <div class="today-content">
-        <div class="xl-yc">
-          <img class="cir-b" src="../../assets/img/cir-o.png"/>
-          <p class="time">{{nTime}}</p>
-        </div>
-        <p class="describe">{{event}}</p>
-      </div>
-    </div>
-
-    <router-link tag="div" :to="{ path: '/school/remind',query:{date:nTime} }">
-      <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
-    </router-link>
+    <van-button class="save">{{$t('checkInfantPDF')}}</van-button>
+    <van-button class="save">{{$t('checkJuniorPDF')}}</van-button>
+    <van-button class="save">{{$t('checkJuniorMiddlePDF')}}</van-button>
+    <van-button class="save">{{$t('checkSeniorMiddlePDF')}}</van-button>
 
 
   </div>
@@ -90,6 +33,10 @@
     },
     data() {
       return {
+        load1: false,
+        load2: false,
+        load3: false,
+        load4: false,
         num_should: 0,//应到人数
         num_actual: 0,//实到人数
         num_miss: 0,//缺勤人数
@@ -162,7 +109,7 @@
             should += res[i]["tec_num_total"] / 1
           }
           for (let j = 0; j < res.length; j++) {
-            if (res[j]["isFinish"]/1==0) {
+            if (res[j]["isFinish"] / 1 == 0) {
               actual = -1
               break
             } else {
@@ -179,7 +126,7 @@
           } else {
             this.num_should = should
             this.num_actual = actual
-            this.num_miss = should-actual
+            this.num_miss = should - actual
           }
 
         })

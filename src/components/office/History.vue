@@ -2,15 +2,10 @@
   <div class="his-body">
     <div class="datePicker">
       <Calendar
-        :months="months"
-        :value="value"
-        :begin="begin"
-        :end="end"
         :now="false"
         :responsive="false"
         lunar
         clean
-        :monthRange="monthRange"
         @select="selected"
         :multi="false"
         ref="calendar"
@@ -21,32 +16,32 @@
       <van-col span="8" class="xl-yc">
         <div class="num-circle nc-1"></div>
         <div class="num-p">
-          应到:
+          {{$t('expected')}}:
           <span class="nc-sp1">{{num_should}}</span>
-          人
+          {{$t('people')}}
         </div>
       </van-col>
       <van-col span="8" class="xc-yc">
         <div class="num-circle nc-2"></div>
         <div class="num-p">
-          实到:
+          {{$t('actual')}}:
           <span class="nc-sp2">{{num_actual}}</span>
-          人
+          {{$t('people')}}
         </div>
       </van-col>
       <van-col span="8" class="xr-yc">
         <div class="num-circle nc-3"></div>
         <div class="num-p">
-          缺勤:
+          {{$t('missing')}}:
           <span class="nc-sp3">{{num_miss}}</span>
-          人
+          {{$t('people')}}
         </div>
       </van-col>
     </van-row>
 
     <div class="today-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t('remark')}}</p>
       </div>
       <div class="today-content">
         <div class="xl-yc">
@@ -59,7 +54,7 @@
 
     <div class="today-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">重要活动</p>
+        <p class="b-title">{{$t('importantActivity')}}</p>
       </div>
       <div class="today-content">
         <div class="xl-yc">
@@ -71,7 +66,7 @@
     </div>
 
     <router-link tag="div" :to="{ path: '/office/remind',query:{date:nTime} }">
-      <van-button :loading="load" loading-text="保存中" class="save">查看学生出勤情况</van-button>
+      <van-button class="save">{{$t('checkAttendance')}}</van-button>
     </router-link>
 
   </div>

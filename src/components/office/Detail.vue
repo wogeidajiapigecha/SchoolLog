@@ -2,13 +2,13 @@
   <div class="de-body">
     <div>
       <div class="re-block xl-yc">
-        <p>应到人数:</p>
+        <p>{{$t('expected')}}:</p>
         <van-cell-group>
           <van-field v-model="ydPeople" disabled placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
-        <p>实到人数:</p>
+        <p>{{$t('actual')}}:</p>
         <van-cell-group>
           <van-field v-model="sdPeople" disabled placeholder=""/>
         </van-cell-group>
@@ -17,14 +17,14 @@
 
     <div class="record-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t('remark')}}</p>
       </div>
       <textarea disabled class="record-content" :model="remark">
     </textarea>
     </div>
 
     <router-link tag="div" :to="{ path: '/office/remind',query:{date:date} }">
-      <van-button :loading="load" loading-text="返回中" class="save">返回</van-button>
+      <van-button :loading="load" loading-text="返回中" class="save">{{$t('back')}}</van-button>
     </router-link>
   </div>
 </template>
