@@ -1,19 +1,19 @@
 <template>
   <div class="re-body">
     <div class="re-block xl-yc">
-      <p>应到人数:</p>
+      <p>{{$t('expected')}}:</p>
       <van-cell-group>
         <van-field v-model="form.num_should" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
-      <p>实到人数:</p>
+      <p>{{$t('actual')}}:</p>
       <van-cell-group>
         <van-field v-model="form.num_actual" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
-      <p>缺席人数:</p>
+      <p>{{$t('missing')}}:</p>
       <van-cell-group>
         <van-field v-model="form.num_miss" placeholder=""/>
       </van-cell-group>
@@ -21,13 +21,13 @@
 
     <div class="record-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t('remark')}}</p>
       </div>
       <textarea class="record-content" v-model="form.remark">
       </textarea>
     </div>
 
-    <van-button :loading="load" loading-text="保存中" class="save" @click="saveRecord">保存记录</van-button>
+    <van-button :loading="load" loading-text="保存中" class="save" @click="saveRecord">{{$t('saveRecord')}}</van-button>
   </div>
 </template>
 
@@ -167,12 +167,6 @@
           color: #333333;
           font-size: 0.937rem;
           font-weight: bold;
-        }
-
-        .b-tt {
-          color: #346AFF;
-          font-size: 0.937rem;
-          margin-left: 5px;
         }
       }
 

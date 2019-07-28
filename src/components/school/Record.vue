@@ -1,19 +1,19 @@
 <template>
   <div class="re-body">
     <div class="re-block xl-yc">
-      <p>应到人数:</p>
+      <p>{{$t("expected")}}:</p>
       <van-cell-group>
         <van-field v-model="ydPeople" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
-      <p>实到人数:</p>
+      <p>{{$t("actual")}}:</p>
       <van-cell-group>
         <van-field v-model="sdPeople" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
-      <p>缺席人数:</p>
+      <p>{{$t("missing")}}:</p>
       <van-cell-group>
         <van-field v-model="qxPeople" placeholder=""/>
       </van-cell-group>
@@ -21,13 +21,13 @@
 
     <div class="record-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t("remark")}}</p>
       </div>
       <textarea class="record-content" :model="remark">
     </textarea>
     </div>
 
-    <van-button :loading="load" loading-text="保存中" class="save">保存记录</van-button>
+    <van-button :loading="load" loading-text="保存中" class="save">{{$t("saveRecord")}}</van-button>
   </div>
 </template>
 

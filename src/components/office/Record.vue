@@ -1,18 +1,18 @@
 <template>
   <div class="re-body">
-    <div style="margin-top: 24px;">
+    <div>
       <div class="b-head xlr-yc">
-        <p class="b-title">一线教师</p>
+        <p class="b-title">{{$t('firstLine')}}</p>
       </div>
 
       <div class="re-block xl-yc">
-        <p>应到人数:</p>
+        <p>{{$t('expected')}}:</p>
         <van-cell-group>
           <van-field v-model="form.num_should_yx" placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
-        <p>实到人数:</p>
+        <p>{{$t('actual')}}:</p>
         <van-cell-group>
           <van-field v-model="form.num_actual_yx" placeholder=""/>
         </van-cell-group>
@@ -20,19 +20,19 @@
     </div>
 
 
-    <div style="margin-top: 24px;">
+    <div style="margin-top: 20px;">
       <div class="b-head xlr-yc">
-        <p class="b-title">国际教师</p>
+        <p class="b-title">{{$t('internationalTeacher')}}</p>
       </div>
 
       <div class="re-block xl-yc">
-        <p>应到人数:</p>
+        <p>{{$t('expected')}}:</p>
         <van-cell-group>
           <van-field v-model="form.num_should_gj" placeholder=""/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
-        <p>实到人数:</p>
+        <p>{{$t('actual')}}:</p>
         <van-cell-group>
           <van-field v-model="form.num_actual_gj" placeholder=""/>
         </van-cell-group>
@@ -41,7 +41,7 @@
 
     <div class="record-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t('remark')}}</p>
       </div>
       <textarea class="record-content" v-model="form.remark">
     </textarea>
@@ -49,13 +49,13 @@
 
     <div class="record-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">重要活动</p>
+        <p class="b-title">{{$t('importantActivity')}}</p>
       </div>
       <textarea class="record-content" v-model="form.events">
     </textarea>
     </div>
 
-    <van-button :loading="load" loading-text="保存中" class="save" @click="saveRecord">保存记录</van-button>
+    <van-button :loading="load" loading-text="保存中" class="save" @click="saveRecord">{{$t('saveRecord')}}</van-button>
   </div>
 </template>
 
@@ -160,6 +160,7 @@
       width: calc(100% - 10px);
       height: 15px;
       padding-left: 7px;
+      margin-bottom: 17px;
       border-left: 3px solid #333333;
 
       .b-title {
@@ -194,28 +195,8 @@
 
     .record-block {
       width: 100%;
-      padding: 20px 0;
+      padding: 0px 0 20px 0;
       height: auto;
-
-      .b-head {
-        width: calc(100% - 10px);
-        height: 15px;
-        padding-left: 7px;
-        margin-bottom: 17px;
-        border-left: 3px solid #333333;
-
-        .b-title {
-          color: #333333;
-          font-size: 0.937rem;
-          font-weight: bold;
-        }
-
-        .b-tt {
-          color: #346AFF;
-          font-size: 0.937rem;
-          margin-left: 5px;
-        }
-      }
 
       .record-content {
         width: 100%;

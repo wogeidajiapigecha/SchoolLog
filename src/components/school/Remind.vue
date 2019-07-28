@@ -6,16 +6,16 @@
           <p class="line-name">{{item.division}}</p>
           <div class="xr-yc">
             <router-link tag="p"  class="line-read mr" :to="{ path: '/school/detail',query:item }">
-              查看
+              {{$t('check')}}
             </router-link>
-            <p class="line-read">生成pdf</p>
+            <p class="line-read">{{$t('generate')}}</p>
           </div>
         </div>
       </van-tab>
       <van-tab title="未完成">
         <div class="xr-yc warn-together">
           <img src="../../assets/img/warn.png" class="warning"/>
-          批量提醒
+          {{$t('batchReminder')}}
         </div>
         <van-checkbox-group v-model="result">
           <van-checkbox

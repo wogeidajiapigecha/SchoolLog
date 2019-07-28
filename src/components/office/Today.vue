@@ -5,39 +5,40 @@
     <div class="notice xl-yc">
       <img class="nt-img" src="../../assets/img/notice.png"/>
       <div class="nt-p">
-        <span>{{t}}好！{{name}}（{{division}}），今天是{{d}}！</span>
+        <span v-show="cookie=='cn'">{{t}}好！{{name}}（{{division}}），今天是{{d}}！</span>
+        <span v-show="cookie=='en'">Good {{t}}!{{name}}({{division}}),today is {{d}}!</span>
       </div>
     </div>
 
     <div class="today-block today-block-1">
       <div class="b-head xlr-yc">
-        <p class="b-title">今日教师出勤</p>
+        <p class="b-title">{{$t('todayTeacherAttendance')}}</p>
         <router-link tag="div" :to="{ path: '/office/record' }">
           <div class="xl-yc">
             <van-icon name="add-o" color="#346AFF"/>
-            <p class="b-tt">记录</p>
+            <p class="b-tt">{{$t('record')}}</p>
           </div>
         </router-link>
       </div>
       <van-row>
         <van-col span="8" class="tri-block tri-1">
           <p>{{num_should}}</p>
-          <p>应到人数</p>
+          <p>{{$t('expected')}}</p>
         </van-col>
         <van-col span="8" class="tri-block tri-2">
           <p>{{num_actual}}</p>
-          <p>实到人数</p>
+          <p>{{$t('actual')}}</p>
         </van-col>
         <van-col span="8" class="tri-block tri-3">
           <p>{{num_miss}}</p>
-          <p>缺到人数</p>
+          <p>{{$t('missing')}}</p>
         </van-col>
       </van-row>
     </div>
 
     <div class="today-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t('remark')}}</p>
       </div>
       <div class="today-content">
         <div class="xl-yc">
@@ -50,7 +51,7 @@
 
     <div class="today-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">重要活动</p>
+        <p class="b-title">{{$t('importantActivity')}}</p>
       </div>
       <div class="today-content">
         <div class="xl-yc">
@@ -63,26 +64,26 @@
 
     <div class="today-block today-block-1">
       <div class="b-head xlr-yc">
-        <p class="b-title">今日教师记录情况</p>
+        <p class="b-title">{{$t("todayTeacherRecorded")}}</p>
         <router-link tag="div" :to="{ path: '/office/remind',query:{date:today} }">
           <div class="xl-yc">
             <van-icon name="add-o" color="#346AFF"/>
-            <p class="b-tt">提醒</p>
+            <p class="b-tt">{{$t('remind')}}</p>
           </div>
         </router-link>
       </div>
       <van-row>
         <van-col span="8" class="tri-block tri-1">
           <p>{{total_class}}</p>
-          <p>总班级</p>
+          <p>{{$t('general')}}</p>
         </van-col>
         <van-col span="8" class="tri-block tri-2">
           <p>{{finished_class}}</p>
-          <p>已完成</p>
+          <p>{{$t('finished')}}</p>
         </van-col>
         <van-col span="8" class="tri-block tri-3">
           <p>{{unfinish_class}}</p>
-          <p>未完成</p>
+          <p>{{$t('unfinished')}}</p>
         </van-col>
       </van-row>
     </div>
@@ -109,6 +110,7 @@
         total_class: "",
         finished_class: "",
         unfinish_class: "",
+        cookie: window.localStorage.getItem('lang')
       }
     },
     mounted() {
@@ -120,21 +122,37 @@
       getD: function () {
         let now = new Date();
         let a = now.getHours();
-        if (a > 10 && a < 13) {
-          this.t = "中午"
-        } else if (a > 12 && a < 19) {
-          this.t = "下午"
-        } else if (a > 5 && a < 11) {
-          this.t = "上午"
-        } else {
-          this.t = "晚上"
-        }
         let y = now.getFullYear();
         let m = now.getMonth() + 1;
         let d = now.getDate();
         let dd = now.getDay(); //获取当前星期X(0-6,0代表星期天)
         let weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-        this.d = y + "年" + m + "月" + d + "日 " + weekday[dd]
+        let men = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let weekdayen = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        if (this.cookie == "cn") {
+          if (a > 10 && a < 13) {
+            this.t = "中午"
+          } else if (a > 12 && a < 19) {
+            this.t = "下午"
+          } else if (a > 5 && a < 11) {
+            this.t = "上午"
+          } else {
+            this.t = "晚上"
+          }
+          this.d = y + "年" + m + "月" + d + "日 " + weekday[dd]
+        } else if (this.cookie == "en") {
+          if (a > 10 && a < 13) {
+            this.t = "noon"
+          } else if (a > 12 && a < 19) {
+            this.t = "afternoon"
+          } else if (a > 5 && a < 11) {
+            this.t = "morning"
+          } else {
+            this.t = "evening"
+          }
+          this.d = weekdayen[dd] + ', ' + d + ' ' + men[m] + ', ' + y
+        }
+
       },
       getTeachersNum() {
         officeApi.getTeachers(this.$cookies.get("divisionid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {

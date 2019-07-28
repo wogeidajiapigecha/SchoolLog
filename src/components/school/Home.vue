@@ -4,7 +4,7 @@
 
   <van-tabbar v-model="active">
     <van-tabbar-item to="/school/today">
-      <span>今日出勤</span>
+      <span>{{$t('todayAttendance')}}</span>
       <img
         slot="icon"
         slot-scope="props"
@@ -13,7 +13,7 @@
     </van-tabbar-item>
 
     <van-tabbar-item to="/school/history">
-      <span>历史出勤</span>
+      <span>{{$t('historyAttendance')}}</span>
       <img
         slot="icon"
         slot-scope="props"
@@ -21,7 +21,7 @@
       >
     </van-tabbar-item>
     <van-tabbar-item to="/school/me">
-      <span>我</span>
+      <span>{{$t('me')}}</span>
       <img
         slot="icon"
         slot-scope="props"

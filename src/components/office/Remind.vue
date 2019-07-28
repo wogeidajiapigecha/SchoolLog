@@ -5,14 +5,14 @@
         <div class="line xlr-yc" v-for="(item,index) in finishList" :key=index>
           <p class="line-name">{{item.grade}} {{item.class}}</p>
           <router-link tag="p" class="line-read" :to="{ path: '/office/detail',query:item }">
-            查看
+            {{$t('check')}}
           </router-link>
         </div>
       </van-tab>
       <van-tab title="未完成">
         <div class="xr-yc warn-together" @click="alerts">
           <img src="../../assets/img/warn.png" class="warning"/>
-          批量提醒
+          {{$t('batchReminder')}}
         </div>
         <van-checkbox-group v-model="result">
           <van-checkbox

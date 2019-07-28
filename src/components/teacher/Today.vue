@@ -5,39 +5,40 @@
     <div class="notice xl-yc">
       <img class="nt-img" src="../../assets/img/notice.png"/>
       <div class="nt-p">
-        <span>{{t}}好！{{name}}（{{grade}} {{classname}}），今天是{{d}}！</span>
+        <span v-show="cookie=='cn'">{{t}}好！{{name}}（{{grade}} {{classname}}），今天是{{d}}！</span>
+        <span v-show="cookie=='en'">Good {{t}}!{{name}}（{{grade}} {{classname}}）,today is {{d}}!</span>
       </div>
     </div>
 
     <div class="today-block today-block-1">
       <div class="b-head xlr-yc">
-        <p class="b-title">今日出勤</p>
+        <p class="b-title">{{$t('todayAttendance')}}</p>
         <router-link tag="div" :to="{ path: '/teacher/record' }">
           <div class="xl-yc">
             <van-icon name="add-o" color="#346AFF"/>
-            <p class="b-tt">记录</p>
+            <p class="b-tt">{{$t('record')}}</p>
           </div>
         </router-link>
       </div>
       <van-row>
         <van-col span="8" class="tri-block tri-1">
           <p>{{num_should}}</p>
-          <p>应到人数</p>
+          <p>{{$t('expected')}}</p>
         </van-col>
         <van-col span="8" class="tri-block tri-2">
           <p>{{num_actual}}</p>
-          <p>实到人数</p>
+          <p>{{$t('actual')}}</p>
         </van-col>
         <van-col span="8" class="tri-block tri-3">
           <p>{{num_miss}}</p>
-          <p>缺到人数</p>
+          <p>{{$t('missing')}}</p>
         </van-col>
       </van-row>
     </div>
 
     <div class="today-block">
       <div class="b-head xlr-yc">
-        <p class="b-title">备注</p>
+        <p class="b-title">{{$t('remark')}}</p>
       </div>
       <div class="today-content">
         <div class="xl-yc">
@@ -59,14 +60,15 @@
       return {
         t: "",//时间
         name: this.$cookies.get("username"),//姓名
-        grade:this.$cookies.get("grade"),
-        classname:this.$cookies.get("classname"),
+        grade: this.$cookies.get("grade"),
+        classname: this.$cookies.get("classname"),
         d: "",//时间
         num_should: "0",
         num_actual: "- -",
         num_miss: "- -",
-        today:PubFuc.getToDay(),
-        remark:""
+        today: PubFuc.getToDay(),
+        remark: "",
+        cookie: window.localStorage.getItem('lang')
       }
     },
     mounted() {
@@ -77,39 +79,55 @@
       getD: function () {
         let now = new Date();
         let a = now.getHours();
-        if (a > 10 && a < 13) {
-          this.t = "中午"
-        } else if (a > 12 && a < 19) {
-          this.t = "下午"
-        } else if (a > 5 && a < 11) {
-          this.t = "上午"
-        } else {
-          this.t = "晚上"
-        }
         let y = now.getFullYear();
         let m = now.getMonth() + 1;
         let d = now.getDate();
         let dd = now.getDay(); //获取当前星期X(0-6,0代表星期天)
         let weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-        this.d = y + "年" + m + "月" + d + "日 " + weekday[dd]
+        let men = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let weekdayen = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        if (this.cookie == "cn") {
+          if (a > 10 && a < 13) {
+            this.t = "中午"
+          } else if (a > 12 && a < 19) {
+            this.t = "下午"
+          } else if (a > 5 && a < 11) {
+            this.t = "上午"
+          } else {
+            this.t = "晚上"
+          }
+          this.d = y + "年" + m + "月" + d + "日 " + weekday[dd]
+        } else if (this.cookie == "en") {
+          if (a > 10 && a < 13) {
+            this.t = "noon"
+          } else if (a > 12 && a < 19) {
+            this.t = "afternoon"
+          } else if (a > 5 && a < 11) {
+            this.t = "morning"
+          } else {
+            this.t = "evening"
+          }
+          this.d = weekdayen[dd] + ', ' + d + ' ' + men[m] + ', ' + y
+        }
+
       },
       getStudentsNum() {
         teacherApi.getStudents(this.$cookies.get("classid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
           if (res[0]) {
             if (res[0]["stu_num"]) this.num_should = res[0]["stu_num"]
-            if ((res[0]["num_actual"] && res[0]["num_actual"] != null)||res[0]["num_actual"]==0) {
+            if ((res[0]["num_actual"] && res[0]["num_actual"] != null) || res[0]["num_actual"] == 0) {
               this.num_actual = res[0]["num_actual"]
             } else {
               this.num_actual = '- -'
             }
-            if ((res[0]["num_miss"] && res[0]["num_miss"] != null)||res[0]["num_miss"]==0) {
+            if ((res[0]["num_miss"] && res[0]["num_miss"] != null) || res[0]["num_miss"] == 0) {
               this.num_miss = res[0]["num_miss"]
             } else {
               this.num_miss = '- -'
             }
-            if ((res[0]["remark"] && res[0]["remark"] != "")||res[0]["remark"]==0) {
+            if ((res[0]["remark"] && res[0]["remark"] != "") || res[0]["remark"] == 0) {
               this.remark = res[0]["remark"]
-            }else{
+            } else {
               this.remark = "暂无"
             }
           }

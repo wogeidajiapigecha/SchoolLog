@@ -14,7 +14,7 @@
       <div class="panel-div xlr-yc">
         <div class="panel-left xl-yc">
           <img src="../../assets/img/folder.png"/>
-          <p>语言</p>
+          <p>{{$t('language')}}</p>
         </div>
         <div class="panel-right xr-yc" @click="showLanPicker = true">
           {{lanValue}}
@@ -54,8 +54,15 @@
         showClassPicker: false,
         showLanPicker: false,
         classList: ['实验一（1）班', '实验一（2）班', '实验一（3）班'],
-        lanList: ['中文', '英语'],
+        lanList: ['中文', 'English'],
       };
+    },
+    mounted() {
+      if (window.localStorage.getItem('lang')=="cn") {
+        this.lanValue = "中文"
+      } else {
+        this.lanValue = "English"
+      }
     },
     methods: {
       onConfirmClass(value) {
@@ -65,7 +72,13 @@
 
       onConfirmLan(value) {
         this.lanValue = value;
-        localStorage.setItem('language',value)
+        if (this.lanValue === '中文') {
+          this.$i18n.locale = 'cn'
+          window.localStorage.setItem('lang','cn')
+        } else if (this.lanValue === 'English') {
+          this.$i18n.locale = 'en'
+          window.localStorage.setItem('lang','en')
+        }
         this.showLanPicker = false;
       },
     }
