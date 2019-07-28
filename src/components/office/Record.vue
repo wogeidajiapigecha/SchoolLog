@@ -109,7 +109,8 @@
       saveRecord() {//保存
         this.load = true
         let _this = this
-        let r = /^\+?[1-9][0-9]*$/
+        // let r = /^\+?[1-9][0-9]*$/
+        let r = /^\d+$/
         if(this.form.num_should_yx==""||this.form.num_actual_yx==""
           ||this.form.num_should_gj==""||this.form.num_actual_gj==""
         ){

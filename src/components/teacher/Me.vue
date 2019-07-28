@@ -83,6 +83,8 @@
       onConfirmLan(value) {
         this.lanValue = value;
         localStorage.setItem('language', value)
+        if(value == '中文')this.$i18n.locale = 'cn'
+        else this.$i18n.locale = 'en';
         this.showLanPicker = false;
       },
       getClassList() {

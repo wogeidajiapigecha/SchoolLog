@@ -4,7 +4,7 @@
 
   <van-tabbar v-model="active">
     <van-tabbar-item to="/teacher/today">
-      <span>今日出勤</span>
+      <span>{{$t('bottom.view')}}</span>
       <img
         slot="icon"
         slot-scope="props"
@@ -54,7 +54,7 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.login()
   },
   methods:{

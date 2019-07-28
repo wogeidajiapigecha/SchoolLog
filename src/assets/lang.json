@@ -1,0 +1,20 @@
+{
+  "en": {
+    "hello": "Hello",
+    "bottom": {
+      "view": "today",
+      "search": "搜索",
+      "message": "消息",
+      "mine": "我的"
+    }
+  },
+  "cn": {
+    "hello": "你好",
+    "bottom": {
+      "view": "今日",
+      "search": "搜索",
+      "message": "消息",
+      "mine": "我的"
+    }
+  }
+} 

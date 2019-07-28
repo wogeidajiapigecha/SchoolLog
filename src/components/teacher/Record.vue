@@ -87,7 +87,8 @@
       saveRecord() {//保存
         this.load = true
         let _this = this
-        let r = /^\+?[1-9][0-9]*$/
+        // let r = /^\+?[1-9][0-9]*$/
+        let r = /^\d+$/
         if(this.form.num_should==""||this.form.num_actual==""||this.form.num_miss==""){
           this.$notify({
             message: '请填写完整实到人数、应到人数、缺勤人数！',
