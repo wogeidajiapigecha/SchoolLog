@@ -15,26 +15,26 @@
     <van-row class="his-num">
       <van-col span="8" class="xl-yc">
         <div class="num-circle nc-1"></div>
-        <div class="num-p">
+        <div class="num-p xl-yc">
           {{$t('expected')}}:
           <span class="nc-sp1">{{ydNum}}</span>
-          {{$t('people')}}
+          <span v-show="lan=='cn'">{{$t('people')}}</span>
         </div>
       </van-col>
       <van-col span="8" class="xc-yc">
         <div class="num-circle nc-2"></div>
-        <div class="num-p">
+        <div class="num-p xl-yc">
           {{$t('actual')}}:
           <span class="nc-sp2">{{sdNum}}</span>
-          {{$t('people')}}
+          <span v-show="lan=='cn'">{{$t('people')}}</span>
         </div>
       </van-col>
       <van-col span="8" class="xr-yc">
         <div class="num-circle nc-3"></div>
-        <div class="num-p">
+        <div class="num-p xl-yc">
           {{$t('missing')}}:
           <span class="nc-sp3">{{qqNum}}</span>
-          {{$t('people')}}
+          <span v-show="lan=='cn'">{{$t('people')}}</span>
         </div>
       </van-col>
     </van-row>
@@ -72,7 +72,7 @@
         qqNum: 0,//缺勤人数
         remark: "",
         nTime:"",
-
+        lan: window.localStorage.getItem('lang'),
         // months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         // // disabledArray: ['2018-6-27','2018-6-25'],
         // value: util.formatDate(Date.parse(new Date())),

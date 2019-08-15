@@ -3,19 +3,19 @@
     <div class="re-block xl-yc">
       <p>{{$t('expected')}}:</p>
       <van-cell-group>
-        <van-field v-model="form.num_should" placeholder=""/>
+        <van-field type="number" v-model="form.num_should" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
       <p>{{$t('actual')}}:</p>
       <van-cell-group>
-        <van-field v-model="form.num_actual" placeholder=""/>
+        <van-field type="number" v-model="form.num_actual" placeholder=""/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
       <p>{{$t('missing')}}:</p>
       <van-cell-group>
-        <van-field v-model="form.num_miss" placeholder=""/>
+        <van-field type="number" v-model="form.num_miss" placeholder=""/>
       </van-cell-group>
     </div>
 
@@ -65,18 +65,18 @@
       getStudentsNum() {
         teacherApi.getStudents(this.$cookies.get("classid"), PubFuc.getToDay(), PubFuc.getYear()).then(res => {
           if (res[0]) {
-            if (res[0]["stu_num"]) this.form.num_should = res[0]["stu_num"]+""
-            if ((res[0]["num_actual"] && res[0]["num_actual"] != null)||res[0]["num_actual"]==0) {
-              this.form.num_actual = res[0]["num_actual"]+""
+            if (res[0]["stu_num"]) this.form.num_should = res[0]["stu_num"] + ""
+            if ((res[0]["num_actual"] && res[0]["num_actual"] != null) || res[0]["num_actual"] == 0) {
+              this.form.num_actual = res[0]["num_actual"] + ""
             } else {
               this.form.num_actual = ''
             }
-            if ((res[0]["num_miss"] && res[0]["num_actual"] != null)||res[0]["num_miss"]==0) {
-              this.form.num_miss = res[0]["num_miss"]+""
+            if ((res[0]["num_miss"] && res[0]["num_actual"] != null) || res[0]["num_miss"] == 0) {
+              this.form.num_miss = res[0]["num_miss"] + ""
             } else {
               this.form.num_miss = ''
             }
-            if ((res[0]["remark"] && res[0]["remark"] != "")||res[0]["remark"]==0) {
+            if ((res[0]["remark"] && res[0]["remark"] != "") || res[0]["remark"] == 0) {
               this.form.remark = res[0]["remark"]
             } else {
               this.form.remark = ""
@@ -88,16 +88,16 @@
         this.load = true
         let _this = this
         let r = /^\+?[1-9][0-9]*$/
-        if(this.form.num_should==""||this.form.num_actual==""||this.form.num_miss==""){
+        if (this.form.num_should == "" || this.form.num_actual == "" || this.form.num_miss == "") {
           this.$notify({
             message: '请填写完整实到人数、应到人数、缺勤人数！',
             duration: 2000,
           });
           _this.load = false
           return
-        }else if(!r.test(this.form.num_should)
-          ||!r.test(this.form.num_actual)
-          ||!r.test(this.form.num_miss)){
+        } else if (!r.test(this.form.num_should)
+          || !r.test(this.form.num_actual)
+          || !r.test(this.form.num_miss)) {
           this.$notify({
             message: '请填写实到人数、应到人数、缺勤人数为数字格式',
             duration: 2000,
@@ -113,7 +113,7 @@
             background: '#008000'
           });
           _this.load = false
-        }).catch(error=>{
+        }).catch(error => {
           _this.load = false
         })
       }
