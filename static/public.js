@@ -4,7 +4,9 @@
  */
 window.Config = {
   // prodUrl: "http://localhost:36423",
-  prodUrl: "http://www.ssjc.suzhou.gov.cn/SZWWGJ2",
+  prodUrl: "http://www.ssjc.suzhou.gov.cn/SZWWGJ2",//后台接口
+  corpId: "ww3685eaf065aba746",//企业ID
+  corpSecret: "jiwcOSlIQQLzUZgpjrqT-ksoG0ROlQlNN2csrnW6LzA",//应用secret
 }
 
 window.PubFuc = {

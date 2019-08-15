@@ -3,19 +3,19 @@
     <div class="re-block xl-yc">
       <p>{{$t('expected')}}:</p>
       <van-cell-group>
-        <van-field type="number" v-model="form.num_should" placeholder=""/>
+        <van-field v-model="form.num_should" placeholder="" disabled/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
       <p>{{$t('actual')}}:</p>
       <van-cell-group>
-        <van-field type="number" v-model="form.num_actual" placeholder=""/>
+        <van-field v-model="form.num_actual" placeholder="" :error-message="error.watchNumber"/>
       </van-cell-group>
     </div>
     <div class="re-block xl-yc">
       <p>{{$t('missing')}}:</p>
       <van-cell-group>
-        <van-field type="number" v-model="form.num_miss" placeholder=""/>
+        <van-field v-model="form.num_miss" placeholder="" disabled/>
       </van-cell-group>
     </div>
 
@@ -39,6 +39,7 @@
     data() {
       return {
         load: false,//按钮加载
+        error: {watchNumber:""},
         form: {
           reco_date: PubFuc.getToDay(),
           class_id: this.$cookies.get("classid"),
@@ -87,7 +88,8 @@
       saveRecord() {//保存
         this.load = true
         let _this = this
-        let r = /^\+?[1-9][0-9]*$/
+        // let r = /^\+?[1-9][0-9]*$/
+        let r = /^\d+$/
         if (this.form.num_should == "" || this.form.num_actual == "" || this.form.num_miss == "") {
           this.$notify({
             message: '请填写完整实到人数、应到人数、缺勤人数！',
@@ -116,6 +118,24 @@
         }).catch(error => {
           _this.load = false
         })
+      }
+    },
+    watch: {
+      "form.num_actual"(newValue, oldValue) {
+        let r = /^\d+$/
+        if (newValue == "") {
+          return
+        } else if (!r.test(newValue)) {
+          // this.$notify({
+          //   message: '请填写实到人数为数字格式',
+          //   duration: 2000,
+          // });
+          this.error.watchNumber = "实到人数应为数字格式"
+          this.form.num_actual = ""
+          return
+        }
+        this.error.watchNumber = ""
+        this.form.num_miss = this.form.num_should - newValue
       }
     }
   }

@@ -8,13 +8,13 @@
       <div class="re-block xl-yc">
         <p>{{$t('expected')}}:</p>
         <van-cell-group>
-          <van-field v-model="form.num_should_yx" placeholder=""/>
+          <van-field v-model="form.num_should_yx" placeholder="" disabled/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
         <p>{{$t('actual')}}:</p>
         <van-cell-group>
-          <van-field v-model="form.num_actual_yx" placeholder=""/>
+          <van-field v-model="form.num_actual_yx" placeholder="" type="number"/>
         </van-cell-group>
       </div>
     </div>
@@ -28,13 +28,13 @@
       <div class="re-block xl-yc">
         <p>{{$t('expected')}}:</p>
         <van-cell-group>
-          <van-field v-model="form.num_should_gj" placeholder=""/>
+          <van-field v-model="form.num_should_gj" placeholder="" disabled/>
         </van-cell-group>
       </div>
       <div class="re-block xl-yc">
         <p>{{$t('actual')}}:</p>
         <van-cell-group>
-          <van-field v-model="form.num_actual_gj" placeholder=""/>
+          <van-field v-model="form.num_actual_gj" placeholder="" type="number"/>
         </van-cell-group>
       </div>
     </div>
@@ -109,7 +109,8 @@
       saveRecord() {//保存
         this.load = true
         let _this = this
-        let r = /^\+?[1-9][0-9]*$/
+        // let r = /^\+?[1-9][0-9]*$/
+        let r = /^\d+$/
         if(this.form.num_should_yx==""||this.form.num_actual_yx==""
           ||this.form.num_should_gj==""||this.form.num_actual_gj==""
         ){
@@ -144,8 +145,8 @@
           });
           _this.load = false
         })
-      }
-    }
+      },
+    },
   }
 </script>
 
