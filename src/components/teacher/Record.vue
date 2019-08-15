@@ -115,6 +115,9 @@
             background: '#008000'
           });
           _this.load = false
+          setTimeout(()=>{
+            this.$router.push('/teacher/today');
+          },1000)
         }).catch(error => {
           _this.load = false
         })

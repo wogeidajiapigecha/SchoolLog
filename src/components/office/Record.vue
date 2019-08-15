@@ -138,6 +138,9 @@
             background: '#008000'
           });
           _this.load = false
+          setTimeout(()=>{
+            this.$router.push('/office/today');
+          },1000)
         }).catch(error=>{
           this.$notify({
             message: '保存失败！',
