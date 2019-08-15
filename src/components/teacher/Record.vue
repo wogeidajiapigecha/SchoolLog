@@ -89,7 +89,7 @@
         let _this = this
         // let r = /^\+?[1-9][0-9]*$/
         let r = /^\d+$/
-        if (this.form.num_should == "" || this.form.num_actual == "" || this.form.num_miss == "") {
+        if (this.form.num_should.toString() == "" || this.form.num_actual.toString() == "" || this.form.num_miss.toString() == "") {
           this.$notify({
             message: '请填写完整实到人数、应到人数、缺勤人数！',
             duration: 2000,
@@ -123,6 +123,7 @@
       "form.num_actual"(newValue, oldValue) {
         let r = /^\d+$/
         if (newValue == "") {
+          this.form.num_miss = ""
           return
         } else if (!r.test(newValue)) {
           this.$notify({

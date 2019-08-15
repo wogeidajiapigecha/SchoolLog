@@ -111,8 +111,8 @@
         let _this = this
         // let r = /^\+?[1-9][0-9]*$/
         let r = /^\d+$/
-        if(this.form.num_should_yx==""||this.form.num_actual_yx==""
-          ||this.form.num_should_gj==""||this.form.num_actual_gj==""
+        if(this.form.num_should_yx.toString()==""||this.form.num_actual_yx.toString()==""
+          ||this.form.num_should_gj.toString()==""||this.form.num_actual_gj.toString()==""
         ){
           this.$notify({
             message: '请填写完整实到人数、应到人数！',
