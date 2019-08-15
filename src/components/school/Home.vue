@@ -59,11 +59,16 @@ export default {
   },
   methods:{
     login(){
+      if(!window.localStorage.getItem('lang')) window.localStorage.setItem('lang',"cn")
       this.$cookies.set("schoolname", "苏州XXX学校")
       this.$cookies.set("schoolid", 1)
-      this.$cookies.set("username", "董京")
+      // this.$cookies.set("username", "董京")
+      this.$cookies.set("username", this.$route.query.username)
       this.$cookies.set("userid", 3)
-    }
+    },
+    getQueryString(name) {//获取连接后参数
+      return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ''])[1].replace(/\+/g, '%20')) || null
+    },
   }
 }
 </script>

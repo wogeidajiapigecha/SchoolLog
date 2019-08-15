@@ -7,7 +7,14 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/teacher/today',
+      redirect: '/login'
+    },
+    {
+      path: '/login',
+      component: resolve => require(['../components/Login.vue'], resolve)
+    },
+    {
+      path: '/teacher/today',
       name: 'home',
       component: resolve => require(['../components/teacher/Home.vue'], resolve),
       children:[

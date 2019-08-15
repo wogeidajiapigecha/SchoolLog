@@ -59,16 +59,21 @@ export default {
   },
   methods:{
     login(){
+      if(!window.localStorage.getItem('lang')) window.localStorage.setItem('lang',"cn")
       this.$cookies.set("schoolname", "苏州XXX学校")
       this.$cookies.set("schoolid", 1)
       this.$cookies.set("divisionname", "高中部")
       this.$cookies.set("divisionid", 1)
-      this.$cookies.set("username", "李占盛")
+      // this.$cookies.set("username", "李占盛")
+      this.$cookies.set("username", this.$route.query.username)
       this.$cookies.set("userid", 1)
       this.$cookies.set("grade", "三年级")
       this.$cookies.set("classname", "1班")
       this.$cookies.set("classid", 1)
-    }
+    },
+    getQueryString(name) {//获取连接后参数
+      return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ''])[1].replace(/\+/g, '%20')) || null
+    },
   }
 }
 </script>
